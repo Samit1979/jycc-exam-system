@@ -2026,7 +2026,21 @@
                 date: new Date().toLocaleDateString(),
                 timeTaken: getTimeTaken()
             };
-            
+            // NEW: Also save to Google Sheets for Final Exam
+        if (selectedQuestionSet === 'FINAL') {
+            saveFinalExamToGoogleSheets(
+                {
+                    studentCode: studentId,
+                    studentName: currentStudentData.name,
+                    course: currentStudentData.course
+                },
+                correctAnswers,      // score
+                totalQuestions,      // total questions
+                percentage,          // percentage
+                passed,              // passed status
+                getTimeTaken()       // time taken
+            );
+        }
             examResults.push(result);
             
             // Save Final Exam scores permanently
@@ -2414,7 +2428,6 @@
                 showNotification('Right-click disabled during exam', 'warning', 2000);
             }
         });
-        
         document.addEventListener('keydown', function(e) {
             if (examStarted) {
                 if (e.key === 'F12' || 
@@ -2425,6 +2438,44 @@
                 }
             }
         });
-    </script>
+        // YOUR GOOGLE APPS SCRIPT URL
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxX2mk7jYu3tRUUskK7AhGUigNCiroWzX7yXbEpT1aYHY50WS-xFOexB7LMiE1NuYwP/exec';
+
+// Function to save Final Exam results to Google Sheets
+function saveFinalExamToGoogleSheets(studentData, score, totalQuestions, percentage, passed, timeTaken) {
+    const examData = {
+        studentCode: studentData.studentCode || studentId,
+        studentName: studentData.studentName || currentStudentData.name,
+        course: studentData.course || currentStudentData.course,
+        score: score,
+        totalQuestions: totalQuestions,
+        percentage: percentage,
+        passed: passed,
+        timeTaken: timeTaken
+    };
+
+    showNotification('💾 Saving results to Google Sheets...', 'info', 2000);
+
+    fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(examData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('✅ Results saved to Google Sheets successfully!', 'success', 4000);
+        } else {
+            showNotification('⚠️ Warning: Results not saved to cloud. Saved locally only.', 'warning', 4000);
+        }
+    })
+    .catch(error => {
+        console.error('Error saving to Google Sheets:', error);
+        showNotification('⚠️ Warning: Results not saved to cloud. Saved locally only.', 'warning', 4000);
+    });
+}
+   </script>
 </body>
 </html>
