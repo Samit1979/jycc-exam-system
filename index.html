@@ -2448,14 +2448,18 @@ if (selectedQuestionSet === 'FINAL') {
         // YOUR GOOGLE APPS SCRIPT URL
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWCcEo3mVgXvKEskYuV6ZRJfpmr0BgPS0SBe_-ZzRUIbinUiG3V7Ur2-hCUSvLjx3I/exec';
 
-// Function to save Final Exam results to Google Sheets
 function saveFinalExamToGoogleSheets(studentData, score, totalQuestions, percentage, passed, timeTaken) {
-    // Only save Final Exam results to Google Sheets
+    // Only save Final Exam results
     if (selectedQuestionSet !== 'FINAL') {
         console.log('Not a Final Exam, skipping Google Sheets save');
         return;
     }
 
+    console.log('=== STARTING GOOGLE SHEETS SAVE ===');
+    console.log('Student Data:', studentData);
+    console.log('Score:', score, 'Total:', totalQuestions, 'Percentage:', percentage);
+    
+    // Prepare data - EXACTLY as Google Apps Script expects
     const examData = {
         studentCode: studentData.studentCode || studentId,
         studentName: studentData.studentName || currentStudentData.name,
@@ -2464,15 +2468,15 @@ function saveFinalExamToGoogleSheets(studentData, score, totalQuestions, percent
         totalQuestions: totalQuestions,
         percentage: percentage,
         passed: passed,
-        timeTaken: timeTaken,
-        date: new Date().toLocaleDateString('en-IN'),
-        timestamp: new Date().toLocaleString('en-IN')
+        timeTaken: timeTaken
     };
 
-    console.log('Sending Final Exam data to Google Sheets:', examData);
+    console.log('Prepared exam data for Google Sheets:', examData);
+    console.log('Using Google Script URL:', GOOGLE_SCRIPT_URL);
+
     showNotification('💾 Saving Final Exam results to Google Sheets...', 'info', 3000);
 
-    // Send data to Google Sheets using fetch
+    // Method 1: Try with JSON
     fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         headers: {
@@ -2481,13 +2485,97 @@ function saveFinalExamToGoogleSheets(studentData, score, totalQuestions, percent
         body: JSON.stringify(examData)
     })
     .then(response => {
-        console.log('Google Sheets response received:', response);
-        showNotification('✅ Final Exam results saved to Google Sheets successfully!', 'success', 4000);
+        console.log('Google Sheets fetch response:', response);
+        console.log('Response status:', response.status);
+        console.log('Response ok:', response.ok);
+        
+        if (response.ok) {
+            showNotification('✅ Final Exam results saved to Google Sheets successfully!', 'success', 4000);
+            console.log('=== GOOGLE SHEETS SAVE SUCCESS ===');
+        } else {
+            throw new Error('Response not OK: ' + response.status);
+        }
     })
     .catch(error => {
-        console.error('Error saving to Google Sheets:', error);
-        showNotification('⚠️ Could not save to Google Sheets. Results saved locally only.', 'warning', 4000);
+        console.error('Method 1 failed, trying alternative method...', error);
+        
+        // Method 2: Try with FormData (alternative approach)
+        try {
+            const formData = new FormData();
+            Object.keys(examData).forEach(key => {
+                formData.append(key, examData[key]);
+            });
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                console.log('Alternative method response:', response);
+                showNotification('✅ Final Exam results saved (alternative method)!', 'success', 4000);
+            })
+            .catch(error2 => {
+                console.error('Both methods failed:', error2);
+                
+                // Method 3: Hidden form submission (most reliable)
+                console.log('Trying hidden form method...');
+                submitViaHiddenForm(examData);
+            });
+        } catch (altError) {
+            console.error('Alternative method setup failed:', altError);
+            showNotification('⚠️ Could not save to Google Sheets. Results saved locally only.', 'warning', 4000);
+        }
     });
+}
+
+// Method 3: Hidden form submission (most reliable for Google Apps Script)
+function submitViaHiddenForm(examData) {
+    try {
+        console.log('Using hidden form method...');
+        
+        // Create hidden form
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = GOOGLE_SCRIPT_URL;
+        form.target = 'hidden_iframe_' + Date.now(); // Unique name
+        form.style.display = 'none';
+
+        // Add all data as hidden inputs
+        Object.keys(examData).forEach(key => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = key;
+            input.value = examData[key];
+            form.appendChild(input);
+        });
+
+        // Create hidden iframe
+        const iframe = document.createElement('iframe');
+        iframe.name = form.target;
+        iframe.style.display = 'none';
+        
+        // Set up iframe load handler
+        iframe.onload = function() {
+            console.log('Hidden form submitted successfully');
+            showNotification('✅ Final Exam results saved to Google Sheets!', 'success', 4000);
+            // Clean up
+            setTimeout(() => {
+                if (document.body.contains(form)) document.body.removeChild(form);
+                if (document.body.contains(iframe)) document.body.removeChild(iframe);
+            }, 1000);
+        };
+
+        // Add to page and submit
+        document.body.appendChild(iframe);
+        document.body.appendChild(form);
+        
+        console.log('Submitting form with data:', examData);
+        form.submit();
+        
+    } catch (formError) {
+        console.error('Hidden form method failed:', formError);
+        showNotification('❌ All save methods failed. Results saved locally only.', 'error', 4000);
+    }
 }
    </script>
 </body>
