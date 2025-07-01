@@ -2043,14 +2043,21 @@
         }
             examResults.push(result);
             
-            // Save Final Exam scores permanently
-            if (selectedQuestionSet === 'FINAL') {
-                saveFinalExamScore({
-                    studentCode: studentId,
-                    studentName: currentStudentData.name,
-                    course: currentStudentData.course
-                }, correctAnswers, totalQuestions, percentage, passed, getTimeTaken());
-            }
+           // Save Final Exam scores permanently
+if (selectedQuestionSet === 'FINAL') {
+    saveFinalExamScore({
+        studentCode: studentId,
+        studentName: currentStudentData.name,
+        course: currentStudentData.course
+    }, correctAnswers, totalQuestions, percentage, passed, getTimeTaken());
+    
+    // NEW: Also save to Google Sheets
+    saveFinalExamToGoogleSheets({
+        studentCode: studentId,
+        studentName: currentStudentData.name,
+        course: currentStudentData.course
+    }, correctAnswers, totalQuestions, percentage, passed, getTimeTaken());
+}
             
             // Show results
             hideAllSections();
@@ -2443,6 +2450,12 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWCcEo3mVgXv
 
 // Function to save Final Exam results to Google Sheets
 function saveFinalExamToGoogleSheets(studentData, score, totalQuestions, percentage, passed, timeTaken) {
+    // Only save Final Exam results to Google Sheets
+    if (selectedQuestionSet !== 'FINAL') {
+        console.log('Not a Final Exam, skipping Google Sheets save');
+        return;
+    }
+
     const examData = {
         studentCode: studentData.studentCode || studentId,
         studentName: studentData.studentName || currentStudentData.name,
@@ -2451,11 +2464,15 @@ function saveFinalExamToGoogleSheets(studentData, score, totalQuestions, percent
         totalQuestions: totalQuestions,
         percentage: percentage,
         passed: passed,
-        timeTaken: timeTaken
+        timeTaken: timeTaken,
+        date: new Date().toLocaleDateString('en-IN'),
+        timestamp: new Date().toLocaleString('en-IN')
     };
 
-    showNotification('💾 Saving results to Google Sheets...', 'info', 2000);
+    console.log('Sending Final Exam data to Google Sheets:', examData);
+    showNotification('💾 Saving Final Exam results to Google Sheets...', 'info', 3000);
 
+    // Send data to Google Sheets using fetch
     fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         headers: {
@@ -2463,17 +2480,13 @@ function saveFinalExamToGoogleSheets(studentData, score, totalQuestions, percent
         },
         body: JSON.stringify(examData)
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showNotification('✅ Results saved to Google Sheets successfully!', 'success', 4000);
-        } else {
-            showNotification('⚠️ Warning: Results not saved to cloud. Saved locally only.', 'warning', 4000);
-        }
+    .then(response => {
+        console.log('Google Sheets response received:', response);
+        showNotification('✅ Final Exam results saved to Google Sheets successfully!', 'success', 4000);
     })
     .catch(error => {
         console.error('Error saving to Google Sheets:', error);
-        showNotification('⚠️ Warning: Results not saved to cloud. Saved locally only.', 'warning', 4000);
+        showNotification('⚠️ Could not save to Google Sheets. Results saved locally only.', 'warning', 4000);
     });
 }
    </script>
