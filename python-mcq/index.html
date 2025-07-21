@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python MCQ Exam System - পাইথন প্রোগ্রামিং পরীক্ষা</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --python-blue: #3776ab;
+            --python-yellow: #ffd343;
+            --success-color: #48bb78;
+            --error-color: #e53e3e;
+            --warning-color: #d69e2e;
+            --info-color: #4299e1;
+            --dark-bg: #1a202c;
+            --dark-card: #2d3748;
+            --dark-text: #e2e8f0;
+        }
+        
+        body { 
+            font-family: 'Noto Sans Bengali', sans-serif; 
+            background: var(--primary-gradient); 
+            min-height: 100vh; 
+            padding: 20px; 
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: var(--dark-text);
+        }
+        
+        .container { 
+            background: white; 
+            border-radius: 20px; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15); 
+            padding: 2rem; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            min-height: 75vh;
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode .container {
+            background: var(--dark-card);
+            color: var(--dark-text);
+        }
+        
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+        
+        /* Admin Toggle */
+        .admin-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: linear-gradient(135deg, var(--python-blue) 0%, #2d5aa0 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(55, 118, 171, 0.3);
+        }
+        
+        .admin-toggle:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Python Logo Animation */
+        .python-logo {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: pythonPulse 3s infinite;
+            background: linear-gradient(45deg, var(--python-blue), var(--python-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        @keyframes pythonPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* Floating Code Elements */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .floating-code {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 8s ease-in-out infinite;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: var(--python-blue);
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(180deg); }
+        }
+        
+        /* Home Section */
+        .home-section { text-align: center; }
+        
+        .institute-name { 
+            font-size: 2.2rem; 
+            font-weight: bold; 
+            color: var(--python-blue); 
+            margin-bottom: 0.5rem; 
+            text-transform: uppercase; 
+            letter-spacing: 2px;
+        }
+        
+        body.dark-mode .institute-name { color: var(--dark-text); }
+        
+        .institute-location { 
+            font-size: 1.2rem; 
+            color: var(--error-color); 
+            font-weight: 600;
+            margin-bottom: 3rem;
+        }
+        
+        /* Access Card */
+        .access-card { 
+            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+            border: 3px solid var(--python-blue); 
+            border-radius: 25px; 
+            padding: 3rem 2rem; 
+            margin: 2rem auto; 
+            max-width: 600px; 
+            box-shadow: 0 15px 35px rgba(55, 118, 171, 0.2);
+        }
+        
+        body.dark-mode .access-card {
+            background: linear-gradient(145deg, #2d3748, #1a202c);
+            border-color: var(--python-yellow);
+        }
+        
+        .access-title { 
+            color: var(--python-blue); 
+            font-size: 1.8rem; 
+            font-weight: bold; 
+            margin-bottom: 1rem;
+        }
+        
+        body.dark-mode .access-title { color: var(--python-yellow); }
+        
+        .access-description { 
+            color: #4a5568; 
+            font-size: 1.1rem; 
+            margin-bottom: 2rem; 
+            line-height: 1.6;
+        }
+        
+        body.dark-mode .access-description { color: #a0aec0; }
+        
+        /* Input Styling */
+        .student-code-input { 
+            width: 100%; 
+            padding: 18px 25px; 
+            border: 2px solid var(--python-blue); 
+            border-radius: 15px; 
+            font-size: 1.2rem; 
+            margin-bottom: 1.5rem; 
+            outline: none; 
+            text-align: center; 
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .student-code-input:focus { 
+            border-color: var(--python-yellow); 
+            box-shadow: 0 0 0 4px rgba(255, 211, 67, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        body.dark-mode .student-code-input {
+            background: #1a202c;
+            color: var(--dark-text);
+            border-color: var(--python-yellow);
+        }
+        
+        /* Button Styling */
+        .access-btn { 
+            background: linear-gradient(135deg, var(--python-blue) 0%, #2d5aa0 100%); 
+            color: white; 
+            border: none; 
+            padding: 18px 45px; 
+            border-radius: 15px; 
+            cursor: pointer; 
+            font-size: 1.2rem; 
+            font-weight: bold; 
+            letter-spacing: 1px; 
+            width: 100%; 
+            transition: all 0.3s ease;
+        }
+        
+        .access-btn:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 20px 40px rgba(55, 118, 171, 0.4);
+        }
+        
+        /* Loading Bar */
+        .loading-bar {
+            width: 100%;
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 1rem 0;
+            display: none;
+        }
+        
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--python-blue), var(--python-yellow));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        /* Question Sets */
+        .set-selection-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+            gap: 2rem; 
+            margin: 2rem 0; 
+        }
+        
+        .set-card { 
+            background: white; 
+            border: 3px solid #e2e8f0; 
+            border-radius: 20px; 
+            padding: 2rem; 
+            text-align: center; 
+            cursor: pointer; 
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .set-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(55, 118, 171, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .set-card:hover::before {
+            left: 100%;
+        }
+        
+        .set-card:hover { 
+            border-color: var(--python-blue); 
+            transform: translateY(-10px) scale(1.02); 
+            box-shadow: 0 25px 50px rgba(55, 118, 171, 0.3);
+        }
+        
+        body.dark-mode .set-card {
+            background: #1a202c;
+            border-color: #4a5568;
+        }
+        
+        .set-icon { 
+            font-size: 3.5rem; 
+            margin-bottom: 1rem;
+        }
+        
+        .set-title {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: var(--python-blue);
+            margin-bottom: 0.5rem;
+        }
+        
+        body.dark-mode .set-title { color: var(--python-yellow); }
+        
+        .set-description {
+            color: #4a5568;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+        
+        body.dark-mode .set-description { color: #a0aec0; }
+        
+        .set-info {
+            background: #f0f8ff;
+            border-radius: 10px;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--python-blue);
+        }
+        
+        body.dark-mode .set-info { background: #2d3748; }
+        
+        .set-info div {
+            margin: 0.4rem 0;
+            font-size: 0.95rem;
+            color: #2d3748;
+        }
+        
+        body.dark-mode .set-info div { color: var(--dark-text); }
+        
+        .set-topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+        
+        .topic-tag {
+            background: linear-gradient(45deg, var(--python-blue), #4a90e2);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .topic-tag:hover {
+            transform: scale(1.05);
+            background: linear-gradient(45deg, var(--python-yellow), #ffda44);
+            color: #333;
+        }
+        
+        /* Student Info */
+        .student-info-card {
+            background: #f8f9fa;
+            border: 2px solid var(--python-blue);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 1rem 0;
+            box-shadow: 0 10px 25px rgba(55, 118, 171, 0.1);
+        }
+        
+        body.dark-mode .student-info-card {
+            background: #1a202c;
+            border-color: var(--python-yellow);
+        }
+        
+        .student-info-card h2 {
+            color: var(--python-blue);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 1.6rem;
+        }
+        
+        body.dark-mode .student-info-card h2 { color: var(--python-yellow); }
+        
+        .student-details {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--python-blue);
+        }
+        
+        body.dark-mode .student-details { background: #2d3748; }
+        
+        .student-details p {
+            margin: 0.5rem 0;
+            font-size: 1.1rem;
+            color: #2d3748;
+        }
+        
+        body.dark-mode .student-details p { color: var(--dark-text); }
+        
+        /* Code Syntax Highlighting */
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        
+        .python-keyword { color: #569cd6; }
+        .python-string { color: #ce9178; }
+        .python-number { color: #b5cea8; }
+        .python-comment { color: #6a9955; }
+        
+        /* Exam Interface */
+        .exam-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(145deg, #f0f8ff, #e6f3ff);
+            border-radius: 15px;
+            border: 2px solid var(--python-blue);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        body.dark-mode .exam-header {
+            background: linear-gradient(145deg, #1a202c, #2d3748);
+            border-color: var(--python-yellow);
+        }
+        
+        .timer {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--error-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(229, 62, 62, 0.1);
+            border-radius: 10px;
+        }
+        
+        .progress {
+            font-size: 1.1rem;
+            color: var(--python-blue);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+        
+        body.dark-mode .progress { color: var(--python-yellow); }
+        
+        /* Question Container */
+        .question-container {
+            margin-bottom: 2rem;
+            padding: 2rem;
+            border: 2px solid var(--python-blue);
+            border-radius: 15px;
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            box-shadow: 0 10px 25px rgba(55, 118, 171, 0.1);
+            transition: opacity 0.3s ease;
+        }
+        
+        body.dark-mode .question-container {
+            background: linear-gradient(145deg, #2d3748, #1a202c);
+            border-color: var(--python-yellow);
+        }
+        
+        .question {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            padding: 1.2rem;
+            background: rgba(55, 118, 171, 0.05);
+            border-radius: 10px;
+            border-left: 4px solid var(--python-blue);
+        }
+        
+        body.dark-mode .question {
+            color: var(--dark-text);
+            background: rgba(255, 211, 67, 0.1);
+            border-left-color: var(--python-yellow);
+        }
+        
+        /* Options */
+        .options {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 18px 25px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #ffffff;
+            font-size: 1.1rem;
+        }
+        
+        .option:hover {
+            border-color: var(--python-blue);
+            background: #f0f8ff;
+            transform: translateX(5px);
+        }
+        
+        .option input[type="radio"] {
+            margin-right: 15px;
+            transform: scale(1.4);
+            accent-color: var(--python-blue);
+        }
+        
+        .option.selected {
+            border-color: var(--python-blue);
+            background: linear-gradient(145deg, #e6f3ff, #cce7ff);
+            transform: translateX(5px);
+        }
+        
+        body.dark-mode .option {
+            background: #1a202c;
+            border-color: #4a5568;
+            color: var(--dark-text);
+        }
+        
+        body.dark-mode .option:hover {
+            background: #2d3748;
+            border-color: var(--python-yellow);
+        }
+        
+        body.dark-mode .option.selected {
+            background: linear-gradient(145deg, #1a365d, #2c5282);
+            border-color: var(--python-yellow);
+        }
+        
+        /* Skip Option */
+        .skip-option {
+            background: linear-gradient(145deg, #fff5b0, #faf089) !important;
+            border-color: var(--warning-color) !important;
+            color: #744210 !important;
+            font-weight: bold;
+        }
+        
+        .skip-option:hover {
+            background: linear-gradient(145deg, #faf089, #f6e05e) !important;
+        }
+        
+        /* Navigation */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .btn-nav {
+            background: linear-gradient(135deg, var(--python-blue), #2d5aa0);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-nav:hover {
+            background: linear-gradient(135deg, #2d5aa0, #1e3a8a);
+            transform: translateY(-2px);
+        }
+        
+        .btn-nav:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Submit Button */
+        .submit-btn {
+            background: linear-gradient(135deg, var(--success-color) 0%, #38a169 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            font-weight: 600;
+            display: block;
+            margin: 2rem auto;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(72, 187, 120, 0.3);
+        }
+        
+        /* Results Section */
+        .result-section {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(145deg, #f0f8ff, #e6f3ff);
+            border: 2px solid var(--python-blue);
+            border-radius: 20px;
+            margin: 1rem 0;
+        }
+        
+        body.dark-mode .result-section {
+            background: linear-gradient(145deg, #1a202c, #2d3748);
+            border-color: var(--python-yellow);
+        }
+        
+        .score {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 1.5rem 0;
+        }
+        
+        .score.pass {
+            color: var(--success-color);
+            animation: success-pulse 2s infinite;
+        }
+        
+        .score.fail {
+            color: var(--error-color);
+        }
+        
+        @keyframes success-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* Notification System */
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3000;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+        
+        .notification.success {
+            background: linear-gradient(135deg, var(--success-color), #38a169);
+            color: white;
+        }
+        
+        .notification.error {
+            background: linear-gradient(135deg, var(--error-color), #c53030);
+            color: white;
+        }
+        
+        .notification.warning {
+            background: linear-gradient(135deg, var(--warning-color), #b7791f);
+            color: white;
+        }
+        
+        .notification.info {
+            background: linear-gradient(135deg, var(--python-blue), #2d5aa0);
+            color: white;
+        }
+        
+        /* Hidden Classes */
+        .hidden { display: none !important; }
+        .set-selection-section, 
+        .student-info-section, 
+        .exam-section, 
+        .result-section, 
+        .review-section,
+        .admin-section { display: none; }
+        
+        .header { 
+            text-align: center; 
+            margin-bottom: 2rem; 
+            display: none; 
+        }
+        
+        .header h1 { 
+            color: var(--python-blue); 
+            margin-bottom: 0.5rem; 
+            font-size: 2.5rem; 
+        }
+        
+        .header p { 
+            color: #718096; 
+            font-size: 1.2rem; 
+        }
+        
+        body.dark-mode .header h1 { color: var(--python-yellow); }
+        body.dark-mode .header p { color: #a0aec0; }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .institute-name { font-size: 1.5rem; }
+            .set-selection-grid { grid-template-columns: 1fr; }
+            .exam-header { flex-direction: column; }
+            .score { font-size: 2rem; }
+            .navigation { flex-direction: column; }
+            .python-logo { font-size: 3rem; }
+            .question { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙 ডার্ক</button>
+    
+    <!-- Admin Toggle -->
+    <button class="admin-toggle" onclick="toggleAdmin()" id="adminToggle">👨‍💼 অ্যাডমিন</button>
+    
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="floating-code" style="top: 10%; left: 10%; font-size: 1.5rem;">print()</div>
+        <div class="floating-code" style="top: 20%; right: 15%; font-size: 1.2rem; animation-delay: -2s;">def</div>
+        <div class="floating-code" style="bottom: 20%; left: 20%; font-size: 1.8rem; animation-delay: -4s;">if</div>
+        <div class="floating-code" style="bottom: 30%; right: 10%; font-size: 1.4rem; animation-delay: -1s;">for</div>
+        <div class="floating-code" style="top: 50%; left: 5%; font-size: 1.6rem; animation-delay: -3s;">while</div>
+        <div class="floating-code" style="top: 70%; right: 20%; font-size: 1.3rem; animation-delay: -5s;">import</div>
+    </div>
+
+    <div class="container">
+        <!-- Home Section -->
+        <div class="home-section" id="homeSection">
+            <div class="institute-header">
+                <div class="python-logo">🐍</div>
+                <h1 class="institute-name">জাতীয় যুব কম্পিউটার সেন্টার মানকুন্ডু</h1>
+                <p class="institute-location">📍 মানকুন্ডু, হুগলি</p>
+            </div>
+            <div class="access-card">
+                <h2 class="access-title">🔒 পাইথন প্রোগ্রামিং পরীক্ষা</h2>
+                <p class="access-description">পাইথন MCQ পরীক্ষা সিস্টেমে প্রবেশ করতে আপনার স্টুডেন্ট কোড দিন</p>
+                <div class="student-input-section">
+                    <input type="text" id="studentCode" class="student-code-input" placeholder="স্টুডেন্ট কোড লিখুন" maxlength="15">
+                    <div class="loading-bar" id="loadingBar">
+                        <div class="loading-progress" id="loadingProgress"></div>
+                    </div>
+                    <button class="access-btn" onclick="accessTest()">🚀 পরীক্ষা শুরু করুন</button>
+                </div>
+                <div class="contact-info">📞 স্টুডেন্ট কোড না থাকলে আপনার শিক্ষকের সাথে যোগাযোগ করুন</div>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <div class="header" id="examHeader">
+            <h1>🔥 পাইথন প্রোগ্রামিং MCQ পরীক্ষা</h1>
+            <p>Advanced Python Programming Assessment</p>
+        </div>
+        
+        <!-- Admin Section -->
+        <div class="admin-section" id="adminSection">
+            <div class="student-info-card">
+                <h2>👨‍💼 অ্যাডমিন ড্যাশবোর্ড</h2>
+                <div class="student-details">
+                    <p><strong>🏢 সিস্টেম স্ট্যাটাস:</strong> অনলাইন</p>
+                    <p><strong>👥 মোট শিক্ষার্থী:</strong> ৫ জন নিবন্ধিত</p>
+                    <p><strong>📊 সক্রিয় পরীক্ষা:</strong> ০টি চলমান</p>
+                    <p><strong>🔒 নিরাপত্তা স্তর:</strong> উচ্চ</p>
+                </div>
+                <button class="btn start-exam-btn" onclick="toggleAdmin()">🔙 মূল সিস্টেমে ফিরে যান</button>
+            </div>
+        </div>
+        
+        <!-- Set Selection Section -->
+        <div class="set-selection-section" id="setSelectionSection">
+            <div class="student-info-card">
+                <h2>📚 প্রশ্ন সেট নির্বাচন করুন</h2>
+                <div id="studentDetailsSet" class="student-details"></div>
+                <div class="set-selection-grid">
+                    <div class="set-card" onclick="selectQuestionSet('A')">
+                        <div class="set-icon">🐍</div>
+                        <div class="set-title">সেট A</div>
+                        <div class="set-description">পাইথন বেসিক থেকে ইন্টারমিডিয়েট</div>
+                        <div class="set-info">
+                            <div>✅ ২৫টি প্রশ্ন</div>
+                            <div>⏰ ৩৫ মিনিট</div>
+                            <div>🎯 বেসিক সিনট্যাক্স ও ডেটা টাইপ</div>
+                            <div>📊 পাস: ৬০% (১৫/২৫)</div>
+                        </div>
+                        <div class="set-topics">
+                            <span class="topic-tag">Variables</span>
+                            <span class="topic-tag">Data Types</span>
+                            <span class="topic-tag">Operators</span>
+                            <span class="topic-tag">Input/Output</span>
+                            <span class="topic-tag">Keywords</span>
+                        </div>
+                    </div>
+                    
+                    <div class="set-card" onclick="selectQuestionSet('B')">
+                        <div class="set-icon">📊</div>
+                        <div class="set-title">সেট B</div>
+                        <div class="set-description">ইন্টারমিডিয়েট থেকে অ্যাডভান্স</div>
+                        <div class="set-info">
+                            <div>✅ ২৫টি প্রশ্ন</div>
+                            <div>⏰ ৩৫ মিনিট</div>
+                            <div>🎯 ফাংশন, লুপ ও কন্ডিশন</div>
+                            <div>📊 পাস: ৬০% (১৫/২৫)</div>
+                        </div>
+                        <div class="set-topics">
+                            <span class="topic-tag">Functions</span>
+                            <span class="topic-tag">Loops</span>
+                            <span class="topic-tag">Conditions</span>
+                            <span class="topic-tag">Lists</span>
+                            <span class="topic-tag">Dictionaries</span>
+                        </div>
+                    </div>
+                    
+                    <div class="set-card" onclick="selectQuestionSet('C')">
+                        <div class="set-icon">⚡</div>
+                        <div class="set-title">সেট C</div>
+                        <div class="set-description">এক্সপার্ট লেভেল চ্যালেঞ্জ</div>
+                        <div class="set-info">
+                            <div>✅ ২৫টি প্রশ্ন</div>
+                            <div>⏰ ৩৫ মিনিট</div>
+                            <div>🎯 অবজেক্ট ওরিয়েন্টেড ও মডিউল</div>
+                            <div>📊 পাস: ৬০% (১৫/২৫)</div>
+                        </div>
+                        <div class="set-topics">
+                            <span class="topic-tag">OOP</span>
+                            <span class="topic-tag">Modules</span>
+                            <span class="topic-tag">File Handling</span>
+                            <span class="topic-tag">Exception</span>
+                            <span class="topic-tag">Libraries</span>
+                        </div>
+                    </div>
+                    
+                    <div class="set-card" onclick="requestFinalTestAccess()" style="border: 3px solid #ff6b35; background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);">
+                        <div class="set-icon">🏆</div>
+                        <div class="set-title" style="color: #c53030;">ফাইনাল টেস্ট</div>
+                        <div class="set-description" style="color: #9c2626;">সম্পূর্ণ পাইথন মূল্যায়ন</div>
+                        <div class="set-info" style="background: #fff; border-left: 4px solid #ff6b35;">
+                            <div>✅ ৪০টি প্রশ্ন</div>
+                            <div>⏰ ৬০ মিনিট</div>
+                            <div>🎯 সম্পূর্ণ পাইথন দক্ষতা পরীক্ষা</div>
+                            <div>📊 পাস: ৭০% (২৮/৪০)</div>
+                            <div style="color: #c53030; font-weight: bold;">🔒 পাসওয়ার্ড সুরক্ষিত</div>
+                        </div>
+                        <div class="set-topics">
+                            <span class="topic-tag" style="background: #fed7d7; color: #c53030;">সমস্ত লেভেল</span>
+                            <span class="topic-tag" style="background: #fed7d7; color: #c53030;">সব টপিক</span>
+                            <span class="topic-tag" style="background: #fed7d7; color: #c53030;">সামগ্রিক</span>
+                            <span class="topic-tag" style="background: #fed7d7; color: #c53030;">শিক্ষক অনুমতি</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Student Info Section -->
+        <div class="student-info-section" id="studentInfoSection">
+            <div class="student-info-card">
+                <h2>📋 শিক্ষার্থীর তথ্য</h2>
+                <div id="studentDetails" class="student-details"></div>
+                <div class="selected-set-info" style="background: #c6f6d5; border: 2px solid #38a169; border-radius: 10px; padding: 1rem; margin: 1rem 0; text-align: center;">
+                    <div class="selected-set-text" id="selectedSetDisplay" style="color: #22543d; font-weight: bold; font-size: 1.1rem;">📝 নির্বাচিত: পাইথন প্রশ্ন সেট A</div>
+                </div>
+                <div class="exam-instructions" style="background: white; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; border-left: 4px solid #48bb78;">
+                    <h3 id="examInstructions" style="color: #2d3748; margin-bottom: 1rem;">📝 পরীক্ষার নির্দেশনা:</h3>
+                    <ul id="instructionsList" style="list-style: none; padding: 0;">
+                        <li style="margin: 0.8rem 0; padding: 0.5rem; background: #f7fafc; border-radius: 5px; font-size: 0.95rem; color: #2d3748;">⏰ <strong>সময়সীমা:</strong> ৩৫ মিনিট</li>
+                        <li style="margin: 0.8rem 0; padding: 0.5rem; background: #f7fafc; border-radius: 5px; font-size: 0.95rem; color: #2d3748;">📊 <strong>প্রশ্ন:</strong> ২৫টি বহুনির্বাচনী প্রশ্ন</li>
+                        <li style="margin: 0.8rem 0; padding: 0.5rem; background: #f7fafc; border-radius: 5px; font-size: 0.95rem; color: #2d3748;">✅ <strong>পাসিং স্কোর:</strong> ৬০% (১৫টি সঠিক উত্তর)</li>
+                        <li style="margin: 0.8rem 0; padding: 0.5rem; background: #f7fafc; border-radius: 5px; font-size: 0.95rem; color: #2d3748;">⏭️ <strong>স্কিপ অপশন:</strong> আপনি প্রশ্ন এড়িয়ে পরে ফিরে আসতে পারেন</li>
+                        <li style="margin: 0.8rem 0; padding: 0.5rem; background: #f7fafc; border-radius: 5px; font-size: 0.95rem; color: #2d3748;">🔄 <strong>নেভিগেশন:</strong> Previous/Next বাটন ব্যবহার করুন</li>
+                        <li style="margin: 0.8rem 0; padding: 0.5rem; background: #f7fafc; border-radius: 5px; font-size: 0.95rem; color: #2d3748;">📤 <strong>অটো-সাবমিট:</strong> সময় শেষ হলে পরীক্ষা স্বয়ংক্রিয়ভাবে জমা হবে</li>
+                        <li style="margin: 0.8rem 0; padding: 0.5rem; background: #f7fafc; border-radius: 5px; font-size: 0.95rem; color: #2d3748;">🎯 <strong>স্মার্ট ফিচার:</strong> অগ্রগতি ট্র্যাকিং ও পারফরমেন্স অ্যানালিটিক্স</li>
+                    </ul>
+                </div>
+                <button class="btn start-exam-btn" style="background: linear-gradient(135deg, var(--python-blue) 0%, #2d5aa0 100%); color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-size: 1.2rem; font-weight: 600; width: 100%;" onclick="startExam()">🚀 পাইথন পরীক্ষা শুরু করুন</button>
+            </div>
+        </div>
+        
+        <!-- Exam Section -->
+        <div class="exam-section" id="examSection">
+            <div class="exam-header">
+                <div class="progress" id="progress">
+                    <span>📊</span>
+                    <span>প্রশ্ন ১ এর ২৫</span>
+                </div>
+                <div class="timer" id="timer">
+                    <span>⏰</span>
+                    <span>৩৫:০০</span>
+                </div>
+            </div>
+            <div class="question-container" id="questionContainer"></div>
+            <div class="navigation">
+                <div style="display: flex; gap: 1rem;">
+                    <button class="btn-nav" id="prevBtn" onclick="previousQuestion()" disabled>
+                        <span>⬅️</span>
+                        <span>পূর্ববর্তী</span>
+                    </button>
+                    <button class="btn-nav" id="nextBtn" onclick="nextQuestion()">
+                        <span>পরবর্তী</span>
+                        <span>➡️</span>
+                    </button>
+                </div>
+                <div>
+                    <button class="btn-nav" onclick="showQuestionMap()">🗺️ প্রশ্ন ম্যাপ</button>
+                </div>
+            </div>
+            <div style="text-align: center; margin: 2rem 0;">
+                <button class="submit-btn" id="submitBtn" onclick="submitExam()" style="display: none;">
+                    <span>✅ পরীক্ষা জমা দিন</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Result Section -->
+        <div class="result-section" id="resultSection">
+            <h2>🎉 পরীক্ষা সম্পন্ন!</h2>
+            <div class="progress-circle" id="progressCircle" style="width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(var(--success-color) 0%, #e2e8f0 0%); display: flex; align-items: center; justify-content: center; margin: 2rem auto; position: relative;">
+                <div class="progress-text" id="progressText" style="position: relative; z-index: 1; font-weight: bold; font-size: 1.2rem;">০%</div>
+            </div>
+            <div class="score" id="scoreDisplay"></div>
+            <div class="achievement-badges" id="achievementBadges" style="display: flex; justify-content: center; gap: 1rem; margin: 2rem 0; flex-wrap: wrap;"></div>
+            <div id="resultMessage"></div>
+            <div style="margin-top: 2rem;">
+                <button class="btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600; margin: 0.5rem;" onclick="showReview()">📝 উত্তর পর্যালোচনা</button>
+                <button class="certificate-btn" style="background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%); color: white; border: none; padding: 15px 30px; border-radius: 12px; cursor: pointer; font-size: 1.1rem; font-weight: 600; margin: 1rem 0.5rem; display: none;" onclick="generateCertificate()" id="certificateBtn">
+                    🏆 সার্টিফিকেট জেনারেট করুন
+                </button>
+                <button class="btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600; margin: 0.5rem;" onclick="restartExam()">🔄 আরেকটি পরীক্ষা নিন</button>
+            </div>
+        </div>
+        
+        <!-- Review Section -->
+        <div class="review-section" id="reviewSection" style="padding: 2rem; background: linear-gradient(145deg, #f0f8ff, #e6f3ff); border: 2px solid var(--python-blue); border-radius: 20px; margin: 1rem 0; display: none;">
+            <h2>📖 বিস্তারিত উত্তর পর্যালোচনা</h2>
+            <div id="reviewContainer"></div>
+            <button class="btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600; margin: 0.5rem;" onclick="goBackToResult()">⬅️ ফলাফলে ফিরে যান</button>
+        </div>
+    </div>
+
+    <!-- Password Modal for Final Test -->
+    <div id="passwordModal" style="display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); backdrop-filter: blur(5px);">
+        <div style="background-color: #fefefe; margin: 8% auto; padding: 3rem; border-radius: 25px; width: 90%; max-width: 550px; box-shadow: 0 30px 60px rgba(0,0,0,0.4); text-align: center;">
+            <h3>🔒 ফাইনাল টেস্ট অ্যাক্সেস</h3>
+            <p>এটি একটি নিরাপদ সামগ্রিক পরীক্ষা। ফাইনাল টেস্ট অ্যাক্সেস করতে আপনার শিক্ষকের দেওয়া পাসওয়ার্ড লিখুন।</p>
+            <input type="password" id="finalTestPassword" style="width: 100%; padding: 15px 20px; border: 2px solid #cbd5e0; border-radius: 10px; font-size: 1.1rem; margin-bottom: 1.5rem; outline: none; text-align: center; font-weight: 500;" placeholder="ফাইনাল টেস্ট পাসওয়ার্ড লিখুন" maxlength="20">
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <button style="padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600; background: linear-gradient(135deg, #c53030 0%, #9c2626 100%); color: white;" onclick="verifyFinalTestPassword()">🔓 টেস্ট অ্যাক্সেস</button>
+                <button style="padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600; background: #e2e8f0; color: #4a5568;" onclick="closeFinalTestModal()">❌ বাতিল</button>
+            </div>
+            <div style="margin-top: 1.5rem; font-size: 0.9rem; color: #718096;">
+                🎓 পাসওয়ার্ড না থাকলে আপনার শিক্ষকের সাথে যোগাযোগ করুন<br>
+                <small>এই মূল্যায়নের জন্য উন্নত নিরাপত্তা ব্যবস্থা রয়েছে</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit Confirmation Modal -->
+    <div id="submitModal" style="display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); backdrop-filter: blur(5px);">
+        <div style="background-color: #fefefe; margin: 8% auto; padding: 3rem; border-radius: 25px; width: 90%; max-width: 550px; box-shadow: 0 30px 60px rgba(0,0,0,0.4); text-align: center;">
+            <h3>🤔 জমা দেওয়ার নিশ্চিতকরণ</h3>
+            <div id="submitModalMessage"></div>
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <button style="padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600; background: linear-gradient(135deg, #c53030 0%, #9c2626 100%); color: white;" onclick="confirmSubmission()">✅ হ্যাঁ, পরীক্ষা জমা দিন</button>
+                <button style="padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600; background: #e2e8f0; color: #4a5568;" onclick="cancelSubmission()">❌ বাতিল, পরীক্ষা চালিয়ে যান</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question Map Modal -->
+    <div id="questionMapModal" style="display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); backdrop-filter: blur(5px);">
+        <div style="background-color: #fefefe; margin: 8% auto; padding: 3rem; border-radius: 25px; width: 90%; max-width: 550px; box-shadow: 0 30px 60px rgba(0,0,0,0.4); text-align: center;">
+            <h3>🗺️ প্রশ্ন নেভিগেশন ম্যাপ</h3>
+            <div id="questionMapGrid"></div>
+            <button class="btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600;" onclick="closeQuestionMap()">✅ ম্যাপ বন্ধ করুন</button>
+        </div>
+    </div>
+
+    <script>
+        // Student database
+        var students = {
+            'JYCC2024004': {name: 'অর্পিতা দেবনাথ', course: 'DFA', joinDate: '2024-01-15'},
+            'JYCC2024006': {name: 'বর্ণালী আচার্য', course: 'DFA', joinDate: '2024-01-20'},
+            'JYCC2024025': {name: 'সাইকত দে', course: 'ADCA', joinDate: '2024-02-01'},
+            'TEST001': {name: 'টেস্ট স্টুডেন্ট', course: 'ADCA', joinDate: '2024-01-01'},
+            'ADMIN001': {name: 'সিস্টেম অ্যাডমিন', course: 'ADMIN', joinDate: '2024-01-01'}
+        };
+        
+        var eligibleCourses = ['ADCA', 'DFA', 'CA', 'ADIT', 'PYTHON', 'PROGRAMMING', 'ADMIN'];
+        
+        // Question sets - Based on the PDF content
+        var questionSets = {
+            'A': {
+                title: 'পাইথন প্রশ্ন সেট A - বেসিক থেকে ইন্টারমিডিয়েট',
+                timeLimit: 2100, // 35 minutes
+                passingScore: 60,
+                questions: [
+                    {question: "পাইথন প্রোগ্রামিং ল্যাঙ্গুয়েজের প্রবর্তক কে?", options: ["টিম বার্নার্স লি", "গুইডো ভ্যান রোসাম", "ব্রেন্ডন আইচ", "মার্ক জুকারবার্গ"], correct: 1},
+                    {question: "পাইথনের ফাইলের সঠিক এক্সটেনশন কোনটি?", options: [".python", ".pi", ".py", ".px"], correct: 2},
+                    {question: "নিচের কোনটি একটি কিওয়ার্ড (keyword) নয়?", options: ["and", "or", "not", "switch case"], correct: 3},
+                    {question: "পাইথনে প্রোগ্রাম কোন ভাব নিচের কোনটিতে?", options: ["ইন্টারপ্রিটার", "কম্পাইলার", "a, b উভয়টি", "কোনোটিই নয়"], correct: 0},
+                    {question: "পাইথনে মোট কয়টি কিওয়ার্ড আছে?", options: ["25", "33", "35", "45"], correct: 1},
+                    {question: "একটি ভ্যারিয়েবল কি তিন ধরনের নাম নিতে পারে?", options: ["ক্যারেক্টার সেট", "literal", "identifier", "keyword"], correct: 2},
+                    {question: "পাইথনে স্ট্রিং তৈরি করার জন্য কোন চিহ্ন ব্যবহার করা হয়?", options: ["৪র্থ হ্যাভেন অফসেট", "&r\", \"&r\"", "&r, #", "$, \"\""], correct: 1},
+                    {question: "পাইথনে কমেন্ট লেখার জন্য কোন চিহ্ন ব্যবহার করা হয়?", options: ["//", "#", "/* */", "--"], correct: 1},
+                    {question: "পাইথনে ইনপুট নেওয়ার জন্য কোন ফাংশন ব্যবহার করা হয়?", options: ["get()", "input()", "read()", "scan()"], correct: 1},
+                    {question: "print() ফাংশনের কাজ কি?", options: ["ইনপুট নেওয়া", "আউটপুট প্রদর্শন", "গণনা করা", "ফাইল খোলা"], correct: 1},
+                    {question: "পাইথনে নিচের কোনটি ডেটা টাইপ নয়?", options: ["int", "float", "string", "char"], correct: 3},
+                    {question: "নিচের কোনটি বুলিয়ান ভ্যালু?", options: ["True", "False", "Both True and False", "None"], correct: 2},
+                    {question: "পাইথনে লিস্ট তৈরি করার জন্য কোন ব্র্যাকেট ব্যবহার করা হয়?", options: ["()", "{}", "[]", "<>"], correct: 2},
+                    {question: "পাইথনে ডিকশনারি তৈরি করার জন্য কোন ব্র্যাকেট ব্যবহার করা হয়?", options: ["()", "{}", "[]", "<>"], correct: 1},
+                    {question: "নিচের কোনটি পাইথনের অপারেটর নয়?", options: ["+", "-", "*", "++"], correct: 3},
+                    {question: "পাইথনে ভেরিয়েবলের টাইপ জানার জন্য কোন ফাংশন ব্যবহার করা হয়?", options: ["type()", "typeof()", "datatype()", "vartype()"], correct: 0},
+                    {question: "পাইথনে স্ট্রিং এর দৈর্ঘ্য মাপার জন্য কোন ফাংশন ব্যবহার করা হয়?", options: ["length()", "len()", "size()", "count()"], correct: 1},
+                    {question: "নিচের কোনটি পাইথনে শর্তসাপেক্ষ বিবৃতি?", options: ["for", "while", "if", "def"], correct: 2},
+                    {question: "পাইথনে ফাংশন ডিফাইন করার জন্য কোন কিওয়ার্ড ব্যবহার করা হয়?", options: ["function", "def", "func", "define"], correct: 1},
+                    {question: "পাইথনে লুপ বন্ধ করার জন্য কোন কিওয়ার্ড ব্যবহার করা হয়?", options: ["stop", "break", "exit", "end"], correct: 1},
+                    {question: "পাইথনে পরবর্তী ইটারেশনে যাওয়ার জন্য কোন কিওয়ার্ড ব্যবহার করা হয়?", options: ["next", "continue", "skip", "pass"], correct: 1},
+                    {question: "পাইথনে ইনডেক্স কত থেকে শুরু হয়?", options: ["1", "0", "-1", "2"], correct: 1},
+                    {question: "নিচের কোনটি পাইথনের বিল্ট-ইন ফাংশন?", options: ["sum()", "max()", "min()", "সবগুলি"], correct: 3},
+                    {question: "পাইথনে ইরর হ্যান্ডেল করার জন্য কোন কিওয়ার্ড ব্যবহার করা হয়?", options: ["error", "try", "catch", "handle"], correct: 1},
+                    {question: "পাইথনে মডিউল ইমপোর্ট করার জন্য কোন কিওয়ার্ড ব্যবহার করা হয়?", options: ["include", "import", "load", "require"], correct: 1}
+                ]
+            },
+            'B': {
+                title: 'পাইথন প্রশ্ন সেট B - ইন্টারমিডিয়েট থেকে অ্যাডভান্স',
+                timeLimit: 2100, // 35 minutes
+                passingScore: 60,
+                questions: [
+                    {question: "পাইথনে কোন ফাংশনটি ভ্যারিয়েবলের মান পরিবর্তনযোগ্য কিনা তা পরীক্ষা করে?", options: ["mutable()", "changeable()", "isinstance()", "type()"], correct: 2},
+                    {question: "পাইথনে টিউপল (tuple) কী ধরনের ডেটা স্ট্রাকচার?", options: ["Mutable", "Immutable", "Both", "None"], correct: 1},
+                    {question: "পাইথনে রেঞ্জ ফাংশনের সিনট্যাক্স কী?", options: ["range(start, stop)", "range(stop)", "range(start, stop, step)", "সবগুলি সঠিক"], correct: 3},
+                    {question: "পাইথনে গ্লোবাল ভ্যারিয়েবল ডিক্লেয়ার করার জন্য কোন কিওয়ার্ড ব্যবহার করা হয়?", options: ["global", "public", "extern", "static"], correct: 0},
+                    {question: "পাইথনে ল্যাম্বডা ফাংশন কী?", options: ["নামবিহীন ফাংশন", "বিশেষ ফাংশন", "বিল্ট-ইন ফাংশন", "ক্লাস মেথড"], correct: 0},
+                    {question: "পাইথনে exception handling এর জন্য কোন ব্লক ব্যবহার করা হয়?", options: ["try-catch", "try-except", "try-error", "handle-error"], correct: 1},
+                    {question: "পাইথনে কোন মেথড দিয়ে স্ট্রিং এর সব অক্ষর বড় হাতের করা যায়?", options: ["upper()", "capitalize()", "title()", "big()"], correct: 0},
+                    {question: "পাইথনে লিস্ট এর শেষে এলিমেন্ট যোগ করার জন্য কোন মেথড ব্যবহার করা হয়?", options: ["add()", "append()", "insert()", "push()"], correct: 1},
+                    {question: "পাইথনে ডিকশনারি থেকে কোন key এর value পেতে কোন মেথড ব্যবহার করা হয়?", options: ["value()", "get()", "find()", "search()"], correct: 1},
+                    {question: "পাইথনে ফাইল খোলার জন্য কোন ফাংশন ব্যবহার করা হয়?", options: ["file()", "open()", "read()", "load()"], correct: 1},
+                    {question: "পাইথনে কোন মোড ফাইল পড়ার জন্য ব্যবহার হয়?", options: ["w", "r", "a", "x"], correct: 1},
+                    {question: "পাইথনে কোন মোড ফাইল লেখার জন্য ব্যবহার হয়?", options: ["r", "w", "a", "সবগুলি"], correct: 1},
+                    {question: "পাইথনে কোন statement ব্যবহার করে কোড ব্লক খালি রাখা যায়?", options: ["empty", "null", "pass", "skip"], correct: 2},
+                    {question: "পাইথনে কোন অপারেটর দিয়ে string এর মধ্যে substring খোঁজা যায়?", options: ["find", "in", "search", "locate"], correct: 1},
+                    {question: "পাইথনে list comprehension এর সিনট্যাক্স কী?", options: ["[expression for item in list]", "(expression for item in list)", "{expression for item in list}", "expression for item in list"], correct: 0},
+                    {question: "পাইথনে কোন ফাংশন দিয়ে list এর elements সর্ট করা যায়?", options: ["order()", "sort()", "arrange()", "organize()"], correct: 1},
+                    {question: "পাইথনে কোন method দিয়ে string কে list এ convert করা যায়?", options: ["split()", "divide()", "separate()", "break()"], correct: 0},
+                    {question: "পাইথনে কোন method দিয়ে list কে string এ convert করা যায়?", options: ["combine()", "join()", "merge()", "unite()"], correct: 1},
+                    {question: "পাইথনে generator কী?", options: ["বিশেষ ফাংশন", "বিশেষ ক্লাস", "বিশেষ অবজেক্ট", "বিশেষ ডেটা টাইপ"], correct: 2},
+                    {question: "পাইথনে yield কিওয়ার্ড কী কাজে ব্যবহার হয়?", options: ["ফাংশন শেষ করতে", "জেনারেটর তৈরি করতে", "লুপ বন্ধ করতে", "শর্ত পরীক্ষা করতে"], correct: 1},
+                    {question: "পাইথনে কোন ডেটা টাইপ ordered এবং changeable?", options: ["List", "Tuple", "Set", "Dictionary"], correct: 0},
+                    {question: "পাইথনে Set এর বৈশিষ্ট্য কী?", options: ["Ordered", "Unordered", "Indexed", "সবগুলি"], correct: 1},
+                    {question: "পাইথনে কোন method দিয়ে set এ element যোগ করা যায়?", options: ["append()", "add()", "insert()", "push()"], correct: 1},
+                    {question: "পাইথনে map() ফাংশনের কাজ কী?", options: ["ফাংশন প্রয়োগ করা", "ম্যাপিং তৈরি করা", "পথ খোঁজা", "ডেটা সংরক্ষণ"], correct: 0},
+                    {question: "পাইথনে filter() ফাংশনের কাজ কী?", options: ["ডেটা ফিল্টার করা", "ডেটা সাজানো", "ডেটা গণনা করা", "ডেটা মুছে ফেলা"], correct: 0}
+                ]
+            },
+            'C': {
+                title: 'পাইথন প্রশ্ন সেট C - এক্সপার্ট লেভেল চ্যালেঞ্জ',
+                timeLimit: 2100, // 35 minutes
+                passingScore: 60,
+                questions: [
+                    {question: "পাইথনে class তৈরি করার জন্য কোন কিওয়ার্ড ব্যবহার করা হয়?", options: ["object", "class", "define", "create"], correct: 1},
+                    {question: "পাইথনে constructor method কোনটি?", options: ["__init__()", "__new__()", "__create__()", "__constructor__()"], correct: 0},
+                    {question: "পাইথনে private variable বোঝাতে কী ব্যবহার করা হয়?", options: ["_variable", "__variable", "private variable", "var"], correct: 1},
+                    {question: "পাইথনে inheritance এর জন্য কী সিনট্যাক্স ব্যবহার করা হয়?", options: ["class Child extends Parent", "class Child(Parent)", "class Child : Parent", "class Child inherits Parent"], correct: 1},
+                    {question: "পাইথনে multiple inheritance সমর্থিত কি?", options: ["হ্যাঁ", "না", "শুধুমাত্র কিছু ক্ষেত্রে", "জানা নেই"], correct: 0},
+                    {question: "পাইথনে polymorphism কীভাবে implement করা হয়?", options: ["Method overriding", "Method overloading", "Both", "Interface"], correct: 0},
+                    {question: "পাইথনে কোন decorator function কে static method বানায়?", options: ["@static", "@staticmethod", "@classmethod", "@property"], correct: 1},
+                    {question: "পাইথনে module import করার কতগুলি উপায় আছে?", options: ["২টি", "৩টি", "৪টি", "৫টি"], correct: 2},
+                    {question: "পাইথনে __name__ variable এর কাজ কী?", options: ["ফাইলের নাম", "মডিউলের নাম", "ফাংশনের নাম", "ভ্যারিয়েবলের নাম"], correct: 1},
+                    {question: "পাইথনে package কী?", options: ["একটি ফোল্ডার", "একটি ফাইল", "একটি function", "একটি class"], correct: 0},
+                    {question: "পাইথনে কোন ফাইল package কে indicate করে?", options: ["__init__.py", "__package__.py", "__main__.py", "package.py"], correct: 0},
+                    {question: "পাইথনে exception raise করার জন্য কোন কিওয়ার্ড ব্যবহার করা হয়?", options: ["throw", "raise", "error", "exception"], correct: 1},
+                    {question: "পাইথনে finally block কখন execute হয়?", options: ["সবসময়", "শুধু error হলে", "শুধু সফল হলে", "কখনও না"], correct: 0},
+                    {question: "পাইথনে iterator protocol implement করতে কোন method প্রয়োজন?", options: ["__iter__() এবং __next__()", "__start__() এবং __end__()", "__begin__() এবং __finish__()", "__first__() এবং __last__()"], correct: 0},
+                    {question: "পাইথনে context manager তৈরি করতে কোন method প্রয়োজন?", options: ["__enter__() এবং __exit__()", "__start__() এবং __stop__()", "__open__() এবং __close__()", "__begin__() এবং __end__()"], correct: 0},
+                    {question: "পাইথনে with statement কেন ব্যবহার করা হয়?", options: ["Resource management", "Loop control", "Condition checking", "Function definition"], correct: 0},
+                    {question: "পাইথনে metaclass কী?", options: ["Class এর class", "Function এর function", "Object এর object", "Module এর module"], correct: 0},
+                    {question: "পাইথনে descriptor protocol implement করতে কোন method প্রয়োজন?", options: ["__get__(), __set__(), __delete__()", "__read__(), __write__(), __remove__()", "__fetch__(), __store__(), __clear__()", "__load__(), __save__(), __erase__()"], correct: 0},
+                    {question: "পাইথনে property decorator কী কাজে ব্যবহার হয়?", options: ["Getter method তৈরি করতে", "Setter method তৈরি করতে", "Both getter and setter", "Validation করতে"], correct: 2},
+                    {question: "পাইথনে threading module কী কাজে ব্যবহার হয়?", options: ["Parallel processing", "Sequential processing", "File processing", "Data processing"], correct: 0},
+                    {question: "পাইথনে GIL কী?", options: ["Global Interpreter Lock", "General Input Lock", "Global Import Lock", "General Interface Lock"], correct: 0},
+                    {question: "পাইথনে multiprocessing module কেন ব্যবহার করা হয়?", options: ["GIL bypass করতে", "Memory save করতে", "Speed বাড়াতে", "সবগুলি"], correct: 3},
+                    {question: "পাইথনে regular expression ব্যবহার করতে কোন module import করতে হয়?", options: ["regex", "re", "regexp", "pattern"], correct: 1},
+                    {question: "পাইথনে JSON data handle করতে কোন module ব্যবহার করা হয়?", options: ["json", "javascript", "data", "format"], correct: 0},
+                    {question: "পাইথনে virtual environment তৈরি করতে কোন command ব্যবহার করা হয়?", options: ["python -m venv", "create env", "new environment", "make virtual"], correct: 0}
+                ]
+            },
+            'FINAL': {
+                title: 'ফাইনাল সামগ্রিক পাইথন মূল্যায়ন - ৪০ প্রশ্ন',
+                timeLimit: 3600, // 60 minutes
+                passingScore: 70,
+                questions: [
+                    // Mix of all levels - 40 comprehensive questions
+                    {question: "পাইথন প্রোগ্রামিং ল্যাঙ্গুয়েজের প্রবর্তক কে?", options: ["টিম বার্নার্স লি", "গুইডো ভ্যান রোসাম", "ব্রেন্ডন আইচ", "মার্ক জুকারবার্গ"], correct: 1},
+                    {question: "পাইথনের ফাইলের সঠিক এক্সটেনশন কোনটি?", options: [".python", ".pi", ".py", ".px"], correct: 2},
+                    {question: "পাইথনে মোট কয়টি কিওয়ার্ড আছে?", options: ["25", "33", "35", "45"], correct: 1},
+                    {question: "পাইথনে কমেন্ট লেখার জন্য কোন চিহ্ন ব্যবহার করা হয়?", options: ["//", "#", "/* */", "--"], correct: 1},
+                    {question: "পাইথনে ইনপুট নেওয়ার জন্য কোন ফাংশন ব্যবহার করা হয়?", options: ["get()", "input()", "read()", "scan()"], correct: 1},
+                    {question: "নিচের কোনটি পাইথনের ডেটা টাইপ নয়?", options: ["int", "float", "string", "char"], correct: 3},
+                    {question: "পাইথনে লিস্ট তৈরি করার জন্য কোন ব্র্যাকেট ব্যবহার করা হয়?", options: ["()", "{}", "[]", "<>"], correct: 2},
+                    {question: "পাইথনে ডিকশনারি তৈরি করার জন্য কোন ব্র্যাকেট ব্যবহার করা হয়?", options: ["()", "{}", "[]", "<>"], correct: 1},
+                    {question: "পাইথনে ফাংশন ডিফাইন করার জন্য কোন কিওয়ার্ড ব্যবহার করা হয়?", options: ["function", "def", "func", "define"], correct: 1},
+                    {question: "পাইথনে মডিউল ইমপোর্ট করার জন্য কোন কিওয়ার্ড ব্যবহার করা হয়?", options: ["include", "import", "load", "require"], correct: 1},
+                    {question: "পাইথনে টিউপল (tuple) কী ধরনের ডেটা স্ট্রাকচার?", options: ["Mutable", "Immutable", "Both", "None"], correct: 1},
+                    {question: "পাইথনে exception handling এর জন্য কোন ব্লক ব্যবহার করা হয়?", options: ["try-catch", "try-except", "try-error", "handle-error"], correct: 1},
+                    {question: "পাইথনে লিস্ট এর শেষে এলিমেন্ট যোগ করার জন্য কোন মেথড ব্যবহার করা হয়?", options: ["add()", "append()", "insert()", "push()"], correct: 1},
+                    {question: "পাইথনে ফাইল খোলার জন্য কোন ফাংশন ব্যবহার করা হয়?", options: ["file()", "open()", "read()", "load()"], correct: 1},
+                    {question: "পাইথনে list comprehension এর সিনট্যাক্স কী?", options: ["[expression for item in list]", "(expression for item in list)", "{expression for item in list}", "expression for item in list"], correct: 0},
+                    {question: "পাইথনে class তৈরি করার জন্য কোন কিওয়ার্ড ব্যবহার করা হয়?", options: ["object", "class", "define", "create"], correct: 1},
+                    {question: "পাইথনে constructor method কোনটি?", options: ["__init__()", "__new__()", "__create__()", "__constructor__()"], correct: 0},
+                    {question: "পাইথনে inheritance এর জন্য কী সিনট্যাক্স ব্যবহার করা হয়?", options: ["class Child extends Parent", "class Child(Parent)", "class Child : Parent", "class Child inherits Parent"], correct: 1},
+                    {question: "পাইথনে multiple inheritance সমর্থিত কি?", options: ["হ্যাঁ", "না", "শুধুমাত্র কিছু ক্ষেত্রে", "জানা নেই"], correct: 0},
+                    {question: "পাইথনে module import করার কতগুলি উপায় আছে?", options: ["২টি", "৩টি", "৪টি", "৫টি"], correct: 2},
+                    {question: "পাইথনে iterator protocol implement করতে কোন method প্রয়োজন?", options: ["__iter__() এবং __next__()", "__start__() এবং __end__()", "__begin__() এবং __finish__()", "__first__() এবং __last__()"], correct: 0},
+                    {question: "পাইথনে with statement কেন ব্যবহার করা হয়?", options: ["Resource management", "Loop control", "Condition checking", "Function definition"], correct: 0},
+                    {question: "পাইথনে GIL কী?", options: ["Global Interpreter Lock", "General Input Lock", "Global Import Lock", "General Interface Lock"], correct: 0},
+                    {question: "পাইথনে JSON data handle করতে কোন module ব্যবহার করা হয়?", options: ["json", "javascript", "data", "format"], correct: 0},
+                    {question: "পাইথনে virtual environment তৈরি করতে কোন command ব্যবহার করা হয়?", options: ["python -m venv", "create env", "new environment", "make virtual"], correct: 0},
+                    {question: "পাইথনে string এর মধ্যে variable embed করার জন্য কোন method ব্যবহার করা হয়?", options: ["format()", "f-string", "% formatting", "সবগুলি"], correct: 3},
+                    {question: "পাইথনে কোন operator দিয়ে floor division করা যায়?", options: ["/", "//", "%", "**"], correct: 1},
+                    {question: "পাইথনে কোন operator দিয়ে power calculation করা যায়?", options: ["^", "**", "pow", "power"], correct: 1},
+                    {question: "পাইথনে None কী ধরনের value?", options: ["Empty string", "Zero", "Null value", "Boolean"], correct: 2},
+                    {question: "পাইথনে dictionary এর keys() method কী return করে?", options: ["List", "Tuple", "Set", "Dictionary view"], correct: 3},
+                    {question: "পাইথনে enumerate() function কী কাজে ব্যবহার হয়?", options: ["Counting", "Indexing with iteration", "Numbering", "Listing"], correct: 1},
+                    {question: "পাইথনে zip() function কী কাজ করে?", options: ["File compression", "Parallel iteration", "Data packaging", "Archive creation"], correct: 1},
+                    {question: "পাইথনে lambda function কয়টি expression রাখতে পারে?", options: ["একটি", "দুইটি", "তিনটি", "অসীম"], correct: 0},
+                    {question: "পাইথনে *args এবং **kwargs কী কাজে ব্যবহার হয়?", options: ["Variable arguments", "Keyword arguments", "Both", "None"], correct: 2},
+                    {question: "পাইথনে decorator কী?", options: ["Function modifier", "Class modifier", "Variable modifier", "Import modifier"], correct: 0},
+                    {question: "পাইথনে generator এবং iterator এর মধ্যে পার্থক্য কী?", options: ["Generator subset of iterator", "Iterator subset of generator", "Same thing", "Completely different"], correct: 0},
+                    {question: "পাইথনে memory management কীভাবে হয়?", options: ["Manual", "Automatic garbage collection", "Reference counting", "Both B and C"], correct: 3},
+                    {question: "পাইথনে কোন data structure LIFO principle follow করে?", options: ["List", "Queue", "Stack", "Set"], correct: 2},
+                    {question: "পাইথনে recursive function এর জন্য maximum depth কত?", options: ["100", "500", "1000", "5000"], correct: 2},
+                    {question: "পাইথনে কোন module ব্যবহার করে web scraping করা যায়?", options: ["requests", "beautifulsoup", "selenium", "সবগুলি"], correct: 3}
+                ]
+            }
+        };
+        
+        // Global variables
+        var currentQuestion = 0;
+        var userAnswers = [];
+        var timeLeft = 2100; // 35 minutes default
+        var timer;
+        var studentId = '';
+        var currentStudentData = null;
+        var examStarted = false;
+        var selectedQuestionSet = 'A';
+        var questions = [];
+        var isDarkMode = false;
+        var isAdminMode = false;
+        var examResults = [];
+        
+        // Final Test Security
+        var finalTestPasswords = ['PYTHON2024', 'JYCC@FINAL', 'INSTRUCTOR123', 'ADMIN2024'];
+        
+        // Notification System
+        function showNotification(message, type, duration) {
+            var existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(function(n) { n.remove(); });
+            
+            var notification = document.createElement('div');
+            notification.className = 'notification ' + type;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(function() {
+                notification.remove();
+            }, duration || 3000);
+        }
+        
+        // Theme Toggle
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark-mode', isDarkMode);
+            document.getElementById('themeToggle').textContent = isDarkMode ? '☀️ লাইট' : '🌙 ডার্ক';
+            showNotification(isDarkMode ? 'ডার্ক মোডে পরিবর্তিত হয়েছে' : 'লাইট মোডে পরিবর্তিত হয়েছে', 'info', 2000);
+        }
+        
+        // Admin Panel Toggle
+        function toggleAdmin() {
+            isAdminMode = !isAdminMode;
+            if (isAdminMode) {
+                hideAllSections();
+                document.getElementById('adminSection').style.display = 'block';
+                document.getElementById('examHeader').style.display = 'block';
+                showNotification('অ্যাডমিন প্যানেল সক্রিয় হয়েছে', 'info', 2000);
+            } else {
+                document.getElementById('adminSection').style.display = 'none';
+                document.getElementById('examHeader').style.display = 'none';
+                document.getElementById('homeSection').style.display = 'block';
+                showNotification('মূল সিস্টেমে ফিরে এসেছেন', 'info', 2000);
+            }
+        }
+        
+        // Hide all sections
+        function hideAllSections() {
+            var sections = ['homeSection', 'setSelectionSection', 'studentInfoSection', 'examSection', 'resultSection', 'reviewSection', 'adminSection'];
+            sections.forEach(function(id) {
+                var element = document.getElementById(id);
+                if (element) element.style.display = 'none';
+            });
+        }
+        
+        // Access test with loading
+        function accessTest() {
+            var code = document.getElementById('studentCode').value.trim().toUpperCase();
+            if (!code) {
+                showNotification('অনুগ্রহ করে আপনার স্টুডেন্ট কোড লিখুন', 'warning');
+                return;
+            }
+            
+            var loadingBar = document.getElementById('loadingBar');
+            var loadingProgress = document.getElementById('loadingProgress');
+            loadingBar.style.display = 'block';
+            
+            var progress = 0;
+            var loadingInterval = setInterval(function() {
+                progress += 10;
+                loadingProgress.style.width = progress + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(loadingInterval);
+                    loadingBar.style.display = 'none';
+                    
+                    if (!students[code]) {
+                        showNotification('❌ ভুল স্টুডেন্ট কোড! অনুগ্রহ করে সঠিক কোড দিন।', 'error');
+                        return;
+                    }
+                    
+                    var student = students[code];
+                    if (eligibleCourses.indexOf(student.course) === -1) {
+                        showNotification('❌ কোর্স নিষেধাজ্ঞা! আপনার কোর্স এই পরীক্ষার জন্য যোগ্য নয়।', 'error');
+                        return;
+                    }
+                    
+                    // Success
+                    currentStudentData = student;
+                    studentId = code;
+                    
+                    hideAllSections();
+                    document.getElementById('examHeader').style.display = 'block';
+                    document.getElementById('setSelectionSection').style.display = 'block';
+                    
+                    document.getElementById('studentDetailsSet').innerHTML = 
+                        '<p><strong>🎓 শিক্ষার্থীর নাম:</strong> ' + student.name + '</p>' +
+                        '<p><strong>🆔 স্টুডেন্ট কোড:</strong> ' + code + '</p>' +
+                        '<p><strong>📚 কোর্স:</strong> ' + student.course + '</p>' +
+                        '<p><strong>📅 যোগদানের তারিখ:</strong> ' + (student.joinDate || 'N/A') + '</p>';
+                    
+                    showNotification('স্বাগতম ' + student.name + '! অনুগ্রহ করে আপনার প্রশ্ন সেট নির্বাচন করুন।', 'success');
+                }
+            }, 100);
+        }
+        
+        // Final test access
+        function requestFinalTestAccess() {
+            document.getElementById('passwordModal').style.display = 'block';
+            document.getElementById('finalTestPassword').focus();
+        }
+        
+        function verifyFinalTestPassword() {
+            var enteredPassword = document.getElementById('finalTestPassword').value.trim();
+            if (!enteredPassword) {
+                showNotification('⚠️ অনুগ্রহ করে পাসওয়ার্ড লিখুন', 'warning');
+                return;
+            }
+            
+            if (finalTestPasswords.indexOf(enteredPassword) !== -1) {
+                document.getElementById('passwordModal').style.display = 'none';
+                document.getElementById('finalTestPassword').value = '';
+                selectQuestionSet('FINAL');
+                
+                setTimeout(function() {
+                    showNotification('✅ ফাইনাল টেস্ট অ্যাক্সেস প্রদান করা হয়েছে! আপনার সামগ্রিক মূল্যায়নের জন্য শুভকামনা!', 'success', 4000);
+                }, 300);
+            } else {
+                showNotification('❌ ভুল পাসওয়ার্ড! সঠিক পাসওয়ার্ডের জন্য আপনার শিক্ষকের সাথে যোগাযোগ করুন।', 'error');
+                document.getElementById('finalTestPassword').value = '';
+                document.getElementById('finalTestPassword').focus();
+            }
+        }
+        
+        function closeFinalTestModal() {
+            document.getElementById('passwordModal').style.display = 'none';
+            document.getElementById('finalTestPassword').value = '';
+        }
+        
+        // Question set selection
+        function selectQuestionSet(setId) {
+            selectedQuestionSet = setId;
+            questions = questionSets[setId].questions;
+            
+            hideAllSections();
+            document.getElementById('studentInfoSection').style.display = 'block';
+            document.getElementById('examHeader').style.display = 'block';
+            
+            var setInfo = questionSets[setId];
+            document.getElementById('selectedSetDisplay').textContent = '📝 নির্বাচিত: ' + setInfo.title;
+            
+            var timeLimit = setId === 'FINAL' ? '৬০ মিনিট' : '৩৫ মিনিট';
+            var questionCount = setId === 'FINAL' ? '৪০' : '২৫';
+            var passingScore = setId === 'FINAL' ? '৭০%' : '৬০%';
+            var correctAnswers = setId === 'FINAL' ? '২৮' : '১৫';
+            
+            document.getElementById('instructionsList').innerHTML = 
+                '<li style="margin: 0.8rem 0; padding: 0.5rem; background: #f7fafc; border-radius: 5px; font-size: 0.95rem; color: #2d3748;">⏰ <strong>সময়সীমা:</strong> ' + timeLimit + '</li>' +
+                '<li style="margin: 0.8rem 0; padding: 0.5rem; background: #f7fafc; border-radius: 5px; font-size: 0.95rem; color: #2d3748;">📊 <strong>প্রশ্ন:</strong> ' + questionCount + 'টি বহুনির্বাচনী প্রশ্ন</li>' +
+                '<li style="margin: 0.8rem 0; padding: 0.5rem; background: #f7fafc; border-radius: 5px; font-size: 0.95rem; color: #2d3748;">🎯 <strong>কঠিনতা:</strong> ' + setInfo.title.split(' - ')[1] + '</li>' +
+                '<li style="margin: 0.8rem 0; padding: 0.5rem; background: #f7fafc; border-radius: 5px; font-size: 0.95rem; color: #2d3748;">✅ <strong>পাসিং স্কোর:</strong> ' + passingScore + ' (' + correctAnswers + 'টি সঠিক উত্তর)</li>' +
+                '<li style="margin: 0.8rem 0; padding: 0.5rem; background: #f7fafc; border-radius: 5px; font-size: 0.95rem; color: #2d3748;">⏭️ <strong>স্কিপ অপশন:</strong> আপনি প্রশ্ন এড়িয়ে পরে ফিরে আসতে পারেন</li>' +
+                '<li style="margin: 0.8rem 0; padding: 0.5rem; background: #f7fafc; border-radius: 5px; font-size: 0.95rem; color: #2d3748;">🔄 <strong>নেভিগেশন:</strong> Previous/Next বাটন ব্যবহার করুন</li>' +
+                '<li style="margin: 0.8rem 0; padding: 0.5rem; background: #f7fafc; border-radius: 5px; font-size: 0.95rem; color: #2d3748;">📤 <strong>অটো-সাবমিট:</strong> সময় শেষ হলে পরীক্ষা স্বয়ংক্রিয়ভাবে জমা হবে</li>' +
+                '<li style="margin: 0.8rem 0; padding: 0.5rem; background: #f7fafc; border-radius: 5px; font-size: 0.95rem; color: #2d3748;">🎯 <strong>স্মার্ট ফিচার:</strong> অগ্রগতি ট্র্যাকিং ও পারফরমেন্স অ্যানালিটিক্স</li>' +
+                (setId === 'FINAL' ? '<li style="margin: 0.8rem 0; padding: 0.5rem; background: #f7fafc; border-radius: 5px; font-size: 0.95rem; color: #2d3748;">🏆 <strong>ফাইনাল মূল্যায়ন:</strong> সামগ্রিক পাইথন দক্ষতার পরীক্ষা</li>' : '');
+            
+            document.getElementById('studentDetails').innerHTML = 
+                '<p><strong>🎓 শিক্ষার্থীর নাম:</strong> ' + currentStudentData.name + '</p>' +
+                '<p><strong>🆔 স্টুডেন্ট কোড:</strong> ' + studentId + '</p>' +
+                '<p><strong>📚 কোর্স:</strong> ' + currentStudentData.course + '</p>' +
+                '<p><strong>📅 যোগদানের তারিখ:</strong> ' + (currentStudentData.joinDate || 'N/A') + '</p>';
+            
+            showNotification('প্রশ্ন সেট ' + setId + ' নির্বাচিত হয়েছে। ' + questionCount + 'টি প্রশ্ন, ' + timeLimit + ' সময়সীমা।', 'info');
+        }
+        
+        // Start exam
+        function startExam() {
+            examStarted = true;
+            
+            hideAllSections();
+            document.getElementById('examSection').style.display = 'block';
+            document.getElementById('examHeader').style.display = 'block';
+            
+            userAnswers = new Array(questions.length).fill(null);
+            currentQuestion = 0;
+            timeLeft = questionSets[selectedQuestionSet].timeLimit;
+            
+            // Update progress display for current question count
+            document.getElementById('progress').innerHTML = 
+                '<span>📊</span>' +
+                '<span>প্রশ্ন ১ এর ' + questions.length + '</span>';
+            
+            timer = setInterval(function() {
+                timeLeft--;
+                updateTimerDisplay();
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    autoSubmitExam();
+                }
+            }, 1000);
+            
+            loadQuestion();
+            showNotification('পরীক্ষা শুরু হয়েছে! ' + questions.length + 'টি প্রশ্নের জন্য শুভকামনা!', 'success', 2000);
+        }
+        
+        // Load question
+        function loadQuestion() {
+            var question = questions[currentQuestion];
+            var container = document.getElementById('questionContainer');
+            
+            container.style.opacity = '0';
+            
+            setTimeout(function() {
+                var questionHTML = 
+                    '<div class="question">' +
+                        '<strong>' + (currentQuestion + 1) + '. ' + question.question + '</strong>' +
+                    '</div>' +
+                    '<div class="options">';
+                
+                for (var i = 0; i < question.options.length; i++) {
+                    var isSelected = userAnswers[currentQuestion] === i;
+                    questionHTML += 
+                        '<div class="option ' + (isSelected ? 'selected' : '') + '" onclick="selectOption(' + i + ')">' +
+                            '<input type="radio" name="question_' + currentQuestion + '" value="' + i + '" ' + (isSelected ? 'checked' : '') + '>' +
+                            '<span>' + String.fromCharCode(2437 + i) + '. ' + question.options[i] + '</span>' + // Bengali letters: ক, খ, গ, ঘ
+                        '</div>';
+                }
+                
+                var isSkipped = userAnswers[currentQuestion] === -1;
+                questionHTML += 
+                    '<div class="option skip-option ' + (isSkipped ? 'selected' : '') + '" onclick="skipQuestion()">' +
+                        '<input type="radio" name="question_' + currentQuestion + '" value="-1" ' + (isSkipped ? 'checked' : '') + '>' +
+                        '<span>⏭️ এড়িয়ে যান (পরে উত্তর দিন)</span>' +
+                    '</div>' +
+                '</div>';
+                
+                container.innerHTML = questionHTML;
+                container.style.opacity = '1';
+                
+                updateProgress();
+                updateNavigation();
+            }, 200);
+        }
+        
+        // Answer selection
+        function selectOption(optionIndex) {
+            userAnswers[currentQuestion] = optionIndex;
+            loadQuestion();
+        }
+        
+        function skipQuestion() {
+            userAnswers[currentQuestion] = -1;
+            loadQuestion();
+            showNotification('প্রশ্ন এড়িয়ে গেছেন। পরে এটিতে ফিরে আসতে পারেন।', 'warning', 2000);
+        }
+        
+        // Update progress
+        function updateProgress() {
+            var answeredCount = userAnswers.filter(function(a) { return a !== null && a !== -1; }).length;
+            var skippedCount = userAnswers.filter(function(a) { return a === -1; }).length;
+            
+            document.getElementById('progress').innerHTML = 
+                '<span>📊</span>' +
+                '<span>প্রশ্ন ' + (currentQuestion + 1) + ' এর ' + questions.length + '</span>' +
+                '<span style="font-size: 0.9rem; opacity: 0.8;">(' + answeredCount + ' উত্তরিত, ' + skippedCount + ' এড়ানো)</span>';
+        }
+        
+        // Update navigation
+        function updateNavigation() {
+            var prevBtn = document.getElementById('prevBtn');
+            var nextBtn = document.getElementById('nextBtn');
+            var submitBtn = document.getElementById('submitBtn');
+            
+            if (prevBtn) prevBtn.disabled = currentQuestion === 0;
+            
+            var isLastQuestion = currentQuestion === questions.length - 1;
+            if (nextBtn) nextBtn.style.display = isLastQuestion ? 'none' : 'inline-flex';
+            if (submitBtn) submitBtn.style.display = isLastQuestion ? 'block' : 'none';
+        }
+        
+        // Update timer display
+        function updateTimerDisplay() {
+            var minutes = Math.floor(timeLeft / 60);
+            var seconds = timeLeft % 60;
+            var timeDisplay = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+            
+            var timerElement = document.getElementById('timer');
+            timerElement.innerHTML = '<span>⏰</span><span>' + timeDisplay + '</span>';
+            
+            if (timeLeft < 120) {
+                timerElement.style.color = '#e53e3e';
+            } else if (timeLeft < 300) {
+                timerElement.style.color = '#d69e2e';
+            }
+            
+            if (timeLeft === 300) {
+                showNotification('⚠️ ৫ মিনিট বাকি!', 'warning', 3000);
+            } else if (timeLeft === 60) {
+                showNotification('🚨 ১ মিনিট বাকি!', 'error', 3000);
+            }
+        }
+        
+        // Question map
+        function showQuestionMap() {
+            var modal = document.getElementById('questionMapModal');
+            var grid = document.getElementById('questionMapGrid');
+            
+            var mapHTML = '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap: 0.5rem; margin: 1rem 0;">';
+            
+            for (var i = 0; i < questions.length; i++) {
+                var statusColor = '#e2e8f0';
+                var statusText = '❔';
+                
+                if (userAnswers[i] === -1) {
+                    statusColor = '#fed7d7';
+                    statusText = '⏭️';
+                } else if (userAnswers[i] !== null) {
+                    statusColor = '#c6f6d5';
+                    statusText = '✅';
+                }
+                
+                if (i === currentQuestion) {
+                    statusColor = '#bee3f8';
+                    statusText = '👆';
+                }
+                
+                mapHTML += 
+                    '<div onclick="goToQuestion(' + i + '); closeQuestionMap();" ' +
+                         'style="background: ' + statusColor + '; border: 2px solid #ccc; border-radius: 8px; ' +
+                                'padding: 0.5rem; text-align: center; cursor: pointer; font-weight: bold; ' +
+                                'transition: all 0.3s ease;" ' +
+                         'onmouseover="this.style.transform=\'scale(1.1)\'" ' +
+                         'onmouseout="this.style.transform=\'scale(1)\'">' +
+                        (i + 1) + '<br>' + statusText +
+                    '</div>';
+            }
+            
+            mapHTML += '</div>';
+            mapHTML += '<div style="display: flex; justify-content: center; gap: 1rem; margin: 1rem 0; font-size: 0.9rem;">';
+            mapHTML += '<span>✅ উত্তরিত</span><span>⏭️ এড়ানো</span><span>❔ অনুত্তরিত</span><span>👆 বর্তমান</span>';
+            mapHTML += '</div>';
+            
+            grid.innerHTML = mapHTML;
+            modal.style.display = 'block';
+        }
+        
+        function closeQuestionMap() {
+            document.getElementById('questionMapModal').style.display = 'none';
+        }
+        
+        function goToQuestion(questionIndex) {
+            currentQuestion = questionIndex;
+            loadQuestion();
+        }
+        
+        // Navigation functions
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        }
+        
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            }
+        }
+        
+        // Exam submission
+        function submitExam() {
+            var unansweredCount = userAnswers.filter(function(a) { return a === null; }).length;
+            var skippedCount = userAnswers.filter(function(a) { return a === -1; }).length;
+            var answeredCount = userAnswers.filter(function(a) { return a !== null && a !== -1; }).length;
+            
+            var modalMessage = '';
+            
+            if (unansweredCount > 0 || skippedCount > 0) {
+                modalMessage = '<div style="background: #fed7d7; padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">';
+                
+                if (unansweredCount > 0 && skippedCount > 0) {
+                    modalMessage += '<p style="font-weight: bold; color: #c53030; margin-bottom: 1rem;">⚠️ আপনার অসম্পূর্ণ উত্তর রয়েছে!</p>';
+                    modalMessage += '<p>আপনার <strong>' + unansweredCount + 'টি অনুত্তরিত</strong> এবং <strong>' + skippedCount + 'টি এড়ানো</strong> প্রশ্ন রয়েছে।</p>';
+                } else if (unansweredCount > 0) {
+                    modalMessage += '<p style="font-weight: bold; color: #c53030; margin-bottom: 1rem;">⚠️ আপনার অনুত্তরিত প্রশ্ন রয়েছে!</p>';
+                    modalMessage += '<p>আপনার <strong>' + unansweredCount + 'টি অনুত্তরিত</strong> প্রশ্ন রয়েছে।</p>';
+                } else if (skippedCount > 0) {
+                    modalMessage += '<p style="font-weight: bold; color: #c53030; margin-bottom: 1rem;">⚠️ আপনার এড়ানো প্রশ্ন রয়েছে!</p>';
+                    modalMessage += '<p>আপনার <strong>' + skippedCount + 'টি এড়ানো</strong> প্রশ্ন রয়েছে।</p>';
+                }
+                
+                modalMessage += '<div style="background: white; padding: 1rem; border-radius: 8px; margin: 1rem 0;">';
+                modalMessage += '<h4 style="margin-bottom: 0.5rem;">📊 সারাংশ:</h4>';
+                modalMessage += '<p>✅ <strong>উত্তরিত:</strong> ' + answeredCount + '/' + questions.length + '</p>';
+                if (skippedCount > 0) modalMessage += '<p>⏭️ <strong>এড়ানো:</strong> ' + skippedCount + '</p>';
+                if (unansweredCount > 0) modalMessage += '<p>❓ <strong>অনুত্তরিত:</strong> ' + unansweredCount + '</p>';
+                modalMessage += '</div>';
+                
+                modalMessage += '<p style="font-weight: bold; color: #9c2626;">⚠️ এড়ানো এবং অনুত্তরিত প্রশ্নগুলি <strong>ভুল</strong> হিসেবে গণ্য হবে।</p>';
+                modalMessage += '</div>';
+                modalMessage += '<p>আপনি কি এখনই পরীক্ষা জমা দিতে চান?</p>';
+                
+            } else {
+                modalMessage = '<div style="background: #c6f6d5; padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">';
+                modalMessage += '<p style="font-weight: bold; color: #22543d; margin-bottom: 1rem;">🎉 চমৎকার কাজ!</p>';
+                modalMessage += '<p>আপনি <strong>সকল ' + questions.length + 'টি প্রশ্নের</strong> উত্তর দিয়েছেন।</p>';
+                modalMessage += '<div style="background: white; padding: 1rem; border-radius: 8px; margin: 1rem 0;">';
+                modalMessage += '<p>✅ <strong>সম্পন্ন:</strong> ' + answeredCount + '/' + questions.length + ' প্রশ্ন</p>';
+                modalMessage += '</div>';
+                modalMessage += '</div>';
+                modalMessage += '<p>আপনি কি পরীক্ষা জমা দিতে প্রস্তুত?</p>';
+            }
+            
+            document.getElementById('submitModalMessage').innerHTML = modalMessage;
+            document.getElementById('submitModal').style.display = 'block';
+        }
+        
+        // Confirm submission
+        function confirmSubmission() {
+            document.getElementById('submitModal').style.display = 'none';
+            
+            if (timer) clearInterval(timer);
+            calculateResults();
+        }
+        
+        // Cancel submission
+        function cancelSubmission() {
+            document.getElementById('submitModal').style.display = 'none';
+            showNotification('⚠️ জমা দেওয়া বাতিল হয়েছে। আপনি প্রশ্নের উত্তর দেওয়া চালিয়ে যেতে পারেন।', 'warning', 3000);
+        }
+        
+        function autoSubmitExam() {
+            showNotification('⏰ সময় শেষ! পরীক্ষা স্বয়ংক্রিয়ভাবে জমা দেওয়া হবে।', 'error', 4000);
+            setTimeout(function() {
+                calculateResults();
+            }, 1000);
+        }
+        
+        // Calculate results
+        function calculateResults() {
+            var correctAnswers = 0;
+            var attemptedQuestions = 0;
+            var skippedQuestions = 0;
+            
+            for (var i = 0; i < questions.length; i++) {
+                if (userAnswers[i] === -1) {
+                    skippedQuestions++;
+                } else if (userAnswers[i] !== null) {
+                    attemptedQuestions++;
+                    if (userAnswers[i] === questions[i].correct) {
+                        correctAnswers++;
+                    }
+                }
+            }
+            
+            var totalQuestions = questions.length;
+            var percentage = Math.round((correctAnswers / totalQuestions) * 100);
+            var passingScore = questionSets[selectedQuestionSet].passingScore;
+            var passed = percentage >= passingScore;
+            
+            // Save result
+            var result = {
+                studentName: currentStudentData.name,
+                studentCode: studentId,
+                course: currentStudentData.course,
+                questionSet: selectedQuestionSet,
+                score: correctAnswers,
+                totalQuestions: totalQuestions,
+                percentage: percentage,
+                passed: passed,
+                date: new Date().toLocaleDateString('bn-BD'),
+                timeTaken: getTimeTaken()
+            };
+            
+            examResults.push(result);
+            
+            // Show results
+            hideAllSections();
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('examHeader').style.display = 'block';
+            
+            updateProgressCircle(percentage);
+            
+            var scoreDisplay = document.getElementById('scoreDisplay');
+            scoreDisplay.textContent = correctAnswers + '/' + totalQuestions + ' (' + percentage + '%)';
+            scoreDisplay.className = 'score ' + (passed ? 'pass' : 'fail');
+            
+            updateAchievementBadges(percentage, passed, selectedQuestionSet);
+            
+            var testType = selectedQuestionSet === 'FINAL' ? 'ফাইনাল সামগ্রিক পরীক্ষা' : 'প্র্যাকটিস টেস্ট সেট ' + selectedQuestionSet;
+            document.getElementById('resultMessage').innerHTML = 
+                '<div style="background: ' + (passed ? '#c6f6d5' : '#fed7d7') + '; padding: 1.5rem; border-radius: 15px; margin: 1rem 0;">' +
+                    '<p><strong>🎓 শিক্ষার্থীর নাম:</strong> ' + currentStudentData.name + '</p>' +
+                    '<p><strong>📚 কোর্স:</strong> ' + currentStudentData.course + '</p>' +
+                    '<p><strong>🆔 স্টুডেন্ট কোড:</strong> ' + studentId + '</p>' +
+                    '<p><strong>📝 পরীক্ষার ধরন:</strong> ' + testType + '</p>' +
+                    '<p><strong>📊 ফলাফল:</strong> ' + (passed ? '✅ উত্তীর্ণ' : '❌ অনুত্তীর্ণ') + '</p>' +
+                    '<p><strong>🎯 প্রয়োজনীয় স্কোর:</strong> ' + passingScore + '%</p>' +
+                    '<p><strong>🏆 গ্রেড:</strong> ' + getGrade(percentage) + '</p>' +
+                    '<p><strong>📝 চেষ্টা:</strong> ' + attemptedQuestions + '/' + totalQuestions + ' প্রশ্ন</p>' +
+                    '<p><strong>⏭️ এড়ানো:</strong> ' + skippedQuestions + ' প্রশ্ন</p>' +
+                    '<p><strong>⏱️ সময় ব্যয়:</strong> ' + getTimeTaken() + '</p>' +
+                    '<p><strong>📅 তারিখ:</strong> ' + new Date().toLocaleString('bn-BD') + '</p>' +
+                '</div>';
+            
+            var certificateBtn = document.getElementById('certificateBtn');
+            if (passed && selectedQuestionSet === 'FINAL') {
+                certificateBtn.style.display = 'inline-block';
+            } else {
+                certificateBtn.style.display = 'none';
+            }
+            
+            if (passed) {
+                showNotification('🎉 অভিনন্দন! আপনি ' + percentage + '% নিয়ে উত্তীর্ণ হয়েছেন!', 'success', 5000);
+            } else {
+                showNotification('📚 আরও অধ্যয়ন করুন! আপনার স্কোর ' + percentage + '%। প্রয়োজন: ' + passingScore + '%', 'warning', 5000);
+            }
+        }
+        
+        // Helper functions
+        function updateProgressCircle(percentage) {
+            var circle = document.getElementById('progressCircle');
+            var text = document.getElementById('progressText');
+            
+            var color = percentage >= 90 ? '#48bb78' : 
+                       percentage >= 70 ? '#4299e1' : 
+                       percentage >= 60 ? '#d69e2e' : '#e53e3e';
+            
+            circle.style.background = 'conic-gradient(' + color + ' ' + percentage + '%, #e2e8f0 ' + percentage + '%)';
+            text.textContent = percentage + '%';
+            text.style.color = color;
+        }
+        
+        function updateAchievementBadges(percentage, passed, setId) {
+            var badges = document.getElementById('achievementBadges');
+            var badgeHTML = '';
+            
+            if (percentage >= 95) {
+                badgeHTML += '<div style="padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 600; color: white; background: linear-gradient(45deg, #48bb78, #38a169);">🏆 উৎকর্ষতা</div>';
+            } else if (percentage >= 85) {
+                badgeHTML += '<div style="padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 600; color: white; background: linear-gradient(45deg, #48bb78, #38a169);">⭐ অসাধারণ</div>';
+            } else if (percentage >= 75) {
+                badgeHTML += '<div style="padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 600; color: white; background: linear-gradient(45deg, #4299e1, #3182ce);">👍 ভালো কাজ</div>';
+            } else if (percentage >= 60) {
+                badgeHTML += '<div style="padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 600; color: white; background: linear-gradient(45deg, #d69e2e, #b7791f);">✅ উত্তীর্ণ</div>';
+            } else {
+                badgeHTML += '<div style="padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 600; color: white; background: linear-gradient(45deg, #e53e3e, #c53030);">📚 আরও অধ্যয়ন</div>';
+            }
+            
+            if (setId === 'FINAL' && passed) {
+                badgeHTML += '<div style="padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 600; color: white; background: linear-gradient(45deg, #48bb78, #38a169);">🎓 সার্টিফাইড</div>';
+            }
+            
+            if (percentage === 100) {
+                badgeHTML += '<div style="padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 600; color: white; background: linear-gradient(45deg, #48bb78, #38a169);">💎 পূর্ণ স্কোর</div>';
+            }
+            
+            badges.innerHTML = badgeHTML;
+        }
+        
+        function getGrade(percentage) {
+            if (percentage >= 95) return 'A+';
+            if (percentage >= 90) return 'A';
+            if (percentage >= 85) return 'A-';
+            if (percentage >= 80) return 'B+';
+            if (percentage >= 75) return 'B';
+            if (percentage >= 70) return 'B-';
+            if (percentage >= 65) return 'C+';
+            if (percentage >= 60) return 'C';
+            if (percentage >= 55) return 'C-';
+            if (percentage >= 50) return 'D';
+            return 'F';
+        }
+        
+        function getTimeTaken() {
+            var totalTime = questionSets[selectedQuestionSet].timeLimit;
+            var timeTaken = totalTime - timeLeft;
+            var minutes = Math.floor(timeTaken / 60);
+            var seconds = timeTaken % 60;
+            return minutes + ':' + seconds.toString().padStart(2, '0');
+        }
+        
+        function generateCertificate() {
+            showNotification('🎓 সার্টিফিকেট জেনারেশন ফিচার - আপনার অর্জনের সার্টিফিকেট ডাউনলোড করুন!', 'success', 3000);
+        }
+        
+        // Review section
+        function showReview() {
+            hideAllSections();
+            document.getElementById('reviewSection').style.display = 'block';
+            document.getElementById('examHeader').style.display = 'block';
+            
+            var reviewHTML = '';
+            for (var i = 0; i < questions.length; i++) {
+                var question = questions[i];
+                var userAnswer = userAnswers[i];
+                var correctAnswer = question.correct;
+                var isCorrect = userAnswer === correctAnswer;
+                var wasSkipped = userAnswer === -1;
+                var wasNotAnswered = userAnswer === null;
+                
+                var statusIcon = wasNotAnswered ? '❌' : wasSkipped ? '⏭️' : isCorrect ? '✅' : '❌';
+                var statusColor = wasNotAnswered ? '#e53e3e' : wasSkipped ? '#d69e2e' : isCorrect ? '#38a169' : '#e53e3e';
+                var statusText = wasNotAnswered ? 'উত্তর দেওয়া হয়নি' : wasSkipped ? 'এড়িয়ে গেছে' : isCorrect ? 'সঠিক' : 'ভুল';
+                
+                reviewHTML += 
+                    '<div style="background: white; border: 2px solid #e2e8f0; border-radius: 15px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">' +
+                        '<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">' +
+                            '<div class="question">' +
+                                '<strong>' + (i + 1) + '. ' + question.question + '</strong>' +
+                            '</div>' +
+                            '<div style="color: ' + statusColor + '; font-weight: bold; font-size: 1.1rem;">' +
+                                statusIcon + ' ' + statusText +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="options" style="margin-top: 1rem;">';
+                
+                for (var j = 0; j < question.options.length; j++) {
+                    var className = 'option';
+                    var optionIcon = '';
+                    var optionStyle = 'display: flex; align-items: center; padding: 12px 20px; border: 2px solid #e2e8f0; border-radius: 8px; margin: 0.5rem 0; font-size: 1rem;';
+                    
+                    if (j === correctAnswer) {
+                        optionStyle += ' background: #c6f6d5; border-color: #38a169; color: #22543d;';
+                        optionIcon = ' ✓';
+                    }
+                    if (j === userAnswer && !isCorrect && !wasSkipped && !wasNotAnswered) {
+                        optionStyle += ' background: #fed7d7; border-color: #e53e3e; color: #742a2a;';
+                        optionIcon = ' ✗';
+                    }
+                    
+                    reviewHTML += 
+                        '<div style="' + optionStyle + '">' +
+                            String.fromCharCode(2437 + j) + '. ' + question.options[j] + optionIcon +
+                        '</div>';
+                }
+                
+                reviewHTML += '</div></div>';
+            }
+            
+            document.getElementById('reviewContainer').innerHTML = reviewHTML;
+        }
+        
+        function goBackToResult() {
+            hideAllSections();
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('examHeader').style.display = 'block';
+        }
+        
+        // Restart exam
+        function restartExam() {
+            var confirmRestart = confirm('আপনি কি নিশ্চিত যে নতুন পরীক্ষা শুরু করতে চান? এটি আপনার বর্তমান সেশন মুছে ফেলবে।');
+            
+            if (confirmRestart) {
+                try {
+                    // Clear timer
+                    if (timer) {
+                        clearInterval(timer);
+                        timer = null;
+                    }
+                    
+                    // Reset all exam variables
+                    examStarted = false;
+                    currentQuestion = 0;
+                    userAnswers = [];
+                    timeLeft = 2100; // Reset to 35 minutes
+                    selectedQuestionSet = 'A';
+                    questions = [];
+                    
+                    // Hide all sections first
+                    var sections = ['homeSection', 'setSelectionSection', 'studentInfoSection', 'examSection', 'resultSection', 'reviewSection', 'adminSection'];
+                    sections.forEach(function(sectionId) {
+                        var element = document.getElementById(sectionId);
+                        if (element) {
+                            element.style.display = 'none';
+                        }
+                    });
+                    
+                    // Show set selection with current student data
+                    document.getElementById('examHeader').style.display = 'block';
+                    document.getElementById('setSelectionSection').style.display = 'block';
+                    
+                    // Make sure student details are still shown
+                    if (currentStudentData && studentId) {
+                        document.getElementById('studentDetailsSet').innerHTML = 
+                            '<p><strong>🎓 শিক্ষার্থীর নাম:</strong> ' + currentStudentData.name + '</p>' +
+                            '<p><strong>🆔 স্টুডেন্ট কোড:</strong> ' + studentId + '</p>' +
+                            '<p><strong>📚 কোর্স:</strong> ' + currentStudentData.course + '</p>' +
+                            '<p><strong>📅 যোগদানের তারিখ:</strong> ' + (currentStudentData.joinDate || 'N/A') + '</p>';
+                    }
+                    
+                    // Clear previous exam UI elements
+                    document.getElementById('questionContainer').innerHTML = '';
+                    
+                    // Reset progress display
+                    document.getElementById('progress').innerHTML = 
+                        '<span>📊</span>' +
+                        '<span>প্রশ্ন ১ এর ২৫</span>';
+                    
+                    // Reset timer display
+                    var defaultTime = selectedQuestionSet === 'FINAL' ? '৬০:০০' : '৩৫:০০';
+                    document.getElementById('timer').innerHTML = 
+                        '<span>⏰</span>' +
+                        '<span>' + defaultTime + '</span>';
+                    
+                    showNotification('✅ নতুন পরীক্ষার জন্য প্রস্তুত! অনুগ্রহ করে একটি প্রশ্ন সেট নির্বাচন করুন।', 'success', 3000);
+                    
+                } catch (error) {
+                    showNotification('❌ পরীক্ষা পুনরায় শুরু করতে ত্রুটি। অনুগ্রহ করে পেজ রিফ্রেশ করুন।', 'error', 3000);
+                }
+            }
+        }
+        
+        // Event listeners
+        document.getElementById('studentCode').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') accessTest();
+        });
+        
+        document.getElementById('finalTestPassword').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') verifyFinalTestPassword();
+        });
+        
+        // Modal click outside to close
+        window.onclick = function(event) {
+            var passwordModal = document.getElementById('passwordModal');
+            var questionMapModal = document.getElementById('questionMapModal');
+            
+            if (event.target === passwordModal) {
+                closeFinalTestModal();
+            }
+            if (event.target === questionMapModal) {
+                closeQuestionMap();
+            }
+        };
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                showNotification('পাইথন MCQ সিস্টেমে স্বাগতম! 🐍 এখন প্রতিটি সেটে ২৫টি প্রশ্ন!', 'info', 4000);
+            }, 1000);
+        });
+        
+        // Prevent cheating during exam
+        document.addEventListener('contextmenu', function(e) {
+            if (examStarted) {
+                e.preventDefault();
+                showNotification('পরীক্ষার সময় রাইট-ক্লিক নিষিদ্ধ', 'warning', 2000);
+            }
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (examStarted) {
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                    (e.ctrlKey && e.key === 'u')) {
+                    e.preventDefault();
+                    showNotification('পরীক্ষার সময় ডেভেলপার টুলস নিষিদ্ধ', 'warning', 2000);
+                }
+            }
+        });
+        
+        // Progressive circle update
+        var progressCircle = document.getElementById('progressCircle');
+        if (progressCircle) {
+            progressCircle.style.setProperty('--progress', '0%');
+        }
+    </script>
+</body>
+</html>
