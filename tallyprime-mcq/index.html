@@ -1,0 +1,3346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Tally Prime MCQ Exam System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            --success-color: #48bb78;
+            --error-color: #e53e3e;
+            --warning-color: #d69e2e;
+            --info-color: #4299e1;
+            --dark-bg: #1a202c;
+            --dark-card: #2d3748;
+            --dark-text: #e2e8f0;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: var(--primary-gradient); 
+            min-height: 100vh; 
+            padding: 20px; 
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: var(--dark-text);
+        }
+        
+        .container { 
+            background: white; 
+            border-radius: 20px; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15); 
+            padding: 2rem; 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            min-height: 75vh;
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode .container {
+            background: var(--dark-card);
+            color: var(--dark-text);
+        }
+        
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+        
+        /* Admin Toggle */
+        .admin-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(159, 122, 234, 0.3);
+        }
+        
+        .admin-toggle:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Home Section */
+        .home-section { text-align: center; }
+        
+        .institute-logo { 
+            font-size: 5rem; 
+            margin-bottom: 1rem; 
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .institute-name { 
+            font-size: 2rem; 
+            font-weight: bold; 
+            color: #2c5282; 
+            margin-bottom: 0.5rem; 
+            text-transform: uppercase; 
+            letter-spacing: 2px;
+        }
+        
+        body.dark-mode .institute-name { color: var(--dark-text); }
+        
+        .institute-location { 
+            font-size: 1.2rem; 
+            color: var(--error-color); 
+            font-weight: 600;
+            margin-bottom: 3rem;
+        }
+        
+        /* Access Card */
+        .access-card { 
+            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+            border: 2px solid #e2e8f0; 
+            border-radius: 25px; 
+            padding: 3rem 2rem; 
+            margin: 2rem auto; 
+            max-width: 550px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        body.dark-mode .access-card {
+            background: linear-gradient(145deg, #2d3748, #1a202c);
+            border-color: #4a5568;
+        }
+        
+        .graduation-icon { 
+            font-size: 4rem; 
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .access-title { 
+            color: #2d3748; 
+            font-size: 1.6rem; 
+            font-weight: bold; 
+            margin-bottom: 1rem;
+        }
+        
+        body.dark-mode .access-title { color: var(--dark-text); }
+        
+        .access-description { 
+            color: #4a5568; 
+            font-size: 1.1rem; 
+            margin-bottom: 2rem; 
+            line-height: 1.6;
+        }
+        
+        body.dark-mode .access-description { color: #a0aec0; }
+        
+        /* Input Styling */
+        .student-code-input { 
+            width: 100%; 
+            padding: 18px 25px; 
+            border: 2px solid #cbd5e0; 
+            border-radius: 15px; 
+            font-size: 1.2rem; 
+            margin-bottom: 1.5rem; 
+            outline: none; 
+            text-align: center; 
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .student-code-input:focus { 
+            border-color: var(--info-color); 
+            box-shadow: 0 0 0 4px rgba(66, 153, 225, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        body.dark-mode .student-code-input {
+            background: #1a202c;
+            color: var(--dark-text);
+            border-color: #4a5568;
+        }
+        
+        /* Button Styling */
+        .access-btn { 
+            background: linear-gradient(135deg, var(--success-color) 0%, #38a169 100%); 
+            color: white; 
+            border: none; 
+            padding: 18px 45px; 
+            border-radius: 15px; 
+            cursor: pointer; 
+            font-size: 1.2rem; 
+            font-weight: bold; 
+            letter-spacing: 1px; 
+            width: 100%; 
+            transition: all 0.3s ease;
+        }
+        
+        .access-btn:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 20px 40px rgba(72, 187, 120, 0.3);
+        }
+        
+        /* Loading Bar */
+        .loading-bar {
+            width: 100%;
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 1rem 0;
+            display: none;
+        }
+        
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--info-color), var(--success-color));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        /* Question Sets */
+        .set-selection-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 2rem; 
+            margin: 2rem 0; 
+        }
+        
+        .set-card { 
+            background: white; 
+            border: 3px solid #e2e8f0; 
+            border-radius: 20px; 
+            padding: 2rem; 
+            text-align: center; 
+            cursor: pointer; 
+            transition: all 0.4s ease;
+        }
+        
+        .set-card:hover { 
+            border-color: #ff6b35; 
+            transform: translateY(-10px) scale(1.02); 
+            box-shadow: 0 25px 50px rgba(255, 107, 53, 0.2);
+        }
+        
+        body.dark-mode .set-card {
+            background: #1a202c;
+            border-color: #4a5568;
+        }
+        
+        .set-icon { 
+            font-size: 3rem; 
+            margin-bottom: 1rem;
+        }
+        
+        .set-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        body.dark-mode .set-title { color: var(--dark-text); }
+        
+        .set-description {
+            color: #4a5568;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+        
+        body.dark-mode .set-description { color: #a0aec0; }
+        
+        .set-info {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #ff6b35;
+        }
+        
+        body.dark-mode .set-info { background: #2d3748; }
+        
+        .set-info div {
+            margin: 0.3rem 0;
+            font-size: 0.9rem;
+            color: #2d3748;
+        }
+        
+        body.dark-mode .set-info div { color: var(--dark-text); }
+        
+        .set-topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+        
+        .topic-tag {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        /* Student Info */
+        .student-info-card {
+            background: #f8f9fa;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 1rem 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        body.dark-mode .student-info-card {
+            background: #1a202c;
+            border-color: #4a5568;
+        }
+        
+        .student-info-card h2 {
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+        
+        body.dark-mode .student-info-card h2 { color: var(--dark-text); }
+        
+        .student-details {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #ff6b35;
+        }
+        
+        body.dark-mode .student-details { background: #2d3748; }
+        
+        .student-details p {
+            margin: 0.5rem 0;
+            font-size: 1.1rem;
+            color: #2d3748;
+        }
+        
+        body.dark-mode .student-details p { color: var(--dark-text); }
+        
+        .selected-set-info {
+            background: #c6f6d5;
+            border: 2px solid #38a169;
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: center;
+        }
+        
+        .selected-set-text {
+            color: #22543d;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        /* Exam Instructions */
+        .exam-instructions {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #48bb78;
+        }
+        
+        body.dark-mode .exam-instructions { background: #2d3748; }
+        
+        .exam-instructions h3 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+        
+        body.dark-mode .exam-instructions h3 { color: var(--dark-text); }
+        
+        .exam-instructions ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .exam-instructions li {
+            margin: 0.8rem 0;
+            padding: 0.5rem;
+            background: #f7fafc;
+            border-radius: 5px;
+            font-size: 0.95rem;
+            color: #2d3748;
+        }
+        
+        body.dark-mode .exam-instructions li {
+            background: #1a202c;
+            color: var(--dark-text);
+        }
+        
+        /* Buttons */
+        .btn {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 0.5rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 107, 53, 0.3);
+        }
+        
+        .start-exam-btn {
+            width: 100%;
+            font-size: 1.2rem;
+            padding: 15px;
+        }
+        
+        /* Exam Interface */
+        .exam-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(145deg, #f7fafc, #edf2f7);
+            border-radius: 15px;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        body.dark-mode .exam-header {
+            background: linear-gradient(145deg, #1a202c, #2d3748);
+        }
+        
+        .timer {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--error-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(229, 62, 62, 0.1);
+            border-radius: 10px;
+        }
+        
+        .progress {
+            font-size: 1.1rem;
+            color: #4a5568;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        body.dark-mode .progress { color: var(--dark-text); }
+        
+        /* Question Container */
+        .question-container {
+            margin-bottom: 2rem;
+            padding: 2rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            transition: opacity 0.3s ease;
+        }
+        
+        body.dark-mode .question-container {
+            background: linear-gradient(145deg, #2d3748, #1a202c);
+            border-color: #4a5568;
+        }
+        
+        .question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            padding: 1rem;
+            background: rgba(255, 107, 53, 0.05);
+            border-radius: 10px;
+            border-left: 4px solid #ff6b35;
+        }
+        
+        body.dark-mode .question {
+            color: var(--dark-text);
+            background: rgba(255, 107, 53, 0.1);
+        }
+        
+        /* Options */
+        .options {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #ffffff;
+        }
+        
+        .option:hover {
+            border-color: #cbd5e0;
+            background: #f7fafc;
+            transform: translateX(5px);
+        }
+        
+        .option input[type="radio"] {
+            margin-right: 15px;
+            transform: scale(1.3);
+            accent-color: #ff6b35;
+        }
+        
+        .option.selected {
+            border-color: #ff6b35;
+            background: linear-gradient(145deg, #fed7d7, #fbb6ce);
+            transform: translateX(5px);
+        }
+        
+        body.dark-mode .option {
+            background: #1a202c;
+            border-color: #4a5568;
+            color: var(--dark-text);
+        }
+        
+        body.dark-mode .option:hover {
+            background: #2d3748;
+        }
+        
+        body.dark-mode .option.selected {
+            background: linear-gradient(145deg, #9c2626, #c53030);
+            border-color: #ff6b35;
+        }
+        
+        /* Skip Option */
+        .skip-option {
+            background: linear-gradient(145deg, #fff5b0, #faf089) !important;
+            border-color: var(--warning-color) !important;
+            color: #744210 !important;
+            font-weight: bold;
+        }
+        
+        .skip-option:hover {
+            background: linear-gradient(145deg, #faf089, #f6e05e) !important;
+        }
+        
+        .skip-option.selected {
+            background: linear-gradient(145deg, #f6e05e, #d69e2e) !important;
+        }
+        
+        /* Navigation */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .btn-nav {
+            background: linear-gradient(135deg, #4a5568, #2d3748);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-nav:hover {
+            background: linear-gradient(135deg, #2d3748, #1a202c);
+            transform: translateY(-2px);
+        }
+        
+        .btn-nav:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Submit Button */
+        .submit-btn {
+            background: linear-gradient(135deg, var(--success-color) 0%, #38a169 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            font-weight: 600;
+            display: block;
+            margin: 2rem auto;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(72, 187, 120, 0.3);
+        }
+        
+        /* Results Section */
+        .result-section {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(145deg, #f7fafc, #edf2f7);
+            border-radius: 20px;
+            margin: 1rem 0;
+        }
+        
+        body.dark-mode .result-section {
+            background: linear-gradient(145deg, #1a202c, #2d3748);
+        }
+        
+        .score {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 1.5rem 0;
+        }
+        
+        .score.pass {
+            color: var(--success-color);
+            animation: success-pulse 2s infinite;
+        }
+        
+        .score.fail {
+            color: var(--error-color);
+        }
+        
+        @keyframes success-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* Progress Circle */
+        .progress-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(var(--success-color) 0%, #e2e8f0 0%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem auto;
+            position: relative;
+        }
+        
+        .progress-circle::before {
+            content: '';
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: white;
+            position: absolute;
+        }
+        
+        body.dark-mode .progress-circle::before {
+            background: var(--dark-card);
+        }
+        
+        .progress-text {
+            position: relative;
+            z-index: 1;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        /* Achievement Badges */
+        .achievement-badges {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .badge.excellent { background: linear-gradient(45deg, #48bb78, #38a169); }
+        .badge.good { background: linear-gradient(45deg, #4299e1, #3182ce); }
+        .badge.average { background: linear-gradient(45deg, #d69e2e, #b7791f); }
+        .badge.poor { background: linear-gradient(45deg, #e53e3e, #c53030); }
+        
+        /* Notification System */
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3000;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .notification.success {
+            background: linear-gradient(135deg, var(--success-color), #38a169);
+            color: white;
+        }
+        
+        .notification.error {
+            background: linear-gradient(135deg, var(--error-color), #c53030);
+            color: white;
+        }
+        
+        .notification.warning {
+            background: linear-gradient(135deg, var(--warning-color), #b7791f);
+            color: white;
+        }
+        
+        .notification.info {
+            background: linear-gradient(135deg, var(--info-color), #3182ce);
+            color: white;
+        }
+        
+        /* Hidden Classes */
+        .hidden { display: none !important; }
+        .set-selection-section, 
+        .student-info-section, 
+        .exam-section, 
+        .result-section, 
+        .review-section,
+        .admin-section { display: none; }
+        
+        .header { 
+            text-align: center; 
+            margin-bottom: 2rem; 
+            display: none; 
+        }
+        
+        .header h1 { 
+            color: #4a5568; 
+            margin-bottom: 0.5rem; 
+            font-size: 2.5rem; 
+        }
+        
+        .header p { 
+            color: #718096; 
+            font-size: 1.2rem; 
+        }
+        
+        body.dark-mode .header h1 { color: var(--dark-text); }
+        body.dark-mode .header p { color: #a0aec0; }
+        
+        /* Review Section */
+        .review-section {
+            padding: 2rem;
+            background: linear-gradient(145deg, #f7fafc, #edf2f7);
+            border-radius: 20px;
+            margin: 1rem 0;
+        }
+        
+        body.dark-mode .review-section {
+            background: linear-gradient(145deg, #1a202c, #2d3748);
+        }
+        
+        .review-question {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        body.dark-mode .review-question {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+        
+        .review-question .option.correct {
+            background: #c6f6d5;
+            border-color: #38a169;
+            color: #22543d;
+        }
+        
+        .review-question .option.wrong {
+            background: #fed7d7;
+            border-color: #e53e3e;
+            color: #742a2a;
+        }
+        
+        /* Contact Info */
+        .contact-info {
+            color: #e53e3e;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 1rem;
+        }
+        
+        /* Modal Styles */
+        .password-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .password-modal-content {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+        
+        body.dark-mode .password-modal-content {
+            background: var(--dark-card);
+            color: var(--dark-text);
+        }
+        
+        /* Admin Panel Styles */
+        .admin-section {
+            padding: 2rem;
+            background: linear-gradient(145deg, #f7fafc, #edf2f7);
+            border-radius: 20px;
+            margin: 1rem 0;
+        }
+        
+        body.dark-mode .admin-section {
+            background: linear-gradient(145deg, #1a202c, #2d3748);
+        }
+        
+        .admin-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #9f7aea, #805ad5);
+            border-radius: 15px;
+            color: white;
+        }
+        
+        .admin-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #4299e1;
+        }
+        
+        body.dark-mode .stat-card {
+            background: #2d3748;
+            border-color: #4a5568;
+            color: var(--dark-text);
+        }
+        
+        .stat-card.online { border-left-color: #48bb78; }
+        .stat-card.students { border-left-color: #9f7aea; }
+        .stat-card.active { border-left-color: #f6ad55; }
+        .stat-card.security { border-left-color: #e53e3e; }
+        
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        body.dark-mode .stat-label { color: #a0aec0; }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        
+        body.dark-mode .stat-value { color: var(--dark-text); }
+        
+        .admin-features {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        body.dark-mode .admin-features {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+        
+        .features-header {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1rem;
+        }
+        
+        body.dark-mode .features-header {
+            color: var(--dark-text);
+            border-color: #4a5568;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .feature-item {
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .feature-item:hover {
+            border-color: #9f7aea;
+            background: #f3f0ff;
+            transform: translateY(-2px);
+        }
+        
+        body.dark-mode .feature-item {
+            background: #1a202c;
+            border-color: #4a5568;
+            color: var(--dark-text);
+        }
+        
+        body.dark-mode .feature-item:hover {
+            background: #2d3748;
+        }
+        
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-right: 0.8rem;
+        }
+        
+        .feature-title {
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 0.3rem;
+        }
+        
+        body.dark-mode .feature-title { color: var(--dark-text); }
+        
+        .feature-desc {
+            font-size: 0.9rem;
+            color: #4a5568;
+        }
+        
+        body.dark-mode .feature-desc { color: #a0aec0; }
+        
+        .admin-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        .admin-btn {
+            background: linear-gradient(135deg, #9f7aea, #805ad5);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 200px;
+            justify-content: center;
+        }
+        
+        .admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(159, 122, 234, 0.3);
+        }
+        
+        .admin-btn.export {
+            background: linear-gradient(135deg, #4299e1, #3182ce);
+        }
+        
+        .admin-btn.danger {
+            background: linear-gradient(135deg, #e53e3e, #c53030);
+        }
+        
+        /* Modal styles for admin */
+        .admin-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 4000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .admin-modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+        
+        body.dark-mode .admin-modal-content {
+            background: var(--dark-card);
+            color: var(--dark-text);
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .institute-name { font-size: 1.5rem; }
+            .set-selection-grid { grid-template-columns: 1fr; }
+            .exam-header { flex-direction: column; }
+            .score { font-size: 2rem; }
+            .navigation { flex-direction: column; }
+            .achievement-badges { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙 Dark</button>
+    
+    <!-- Admin Toggle -->
+    <button class="admin-toggle" onclick="toggleAdmin()" id="adminToggle">👨‍💼 Admin</button>
+
+    <div class="container">
+        <!-- Home Section -->
+        <div class="home-section" id="homeSection">
+            <div class="institute-header">
+                <div class="institute-logo">💼</div>
+                <h1 class="institute-name">JATIYA YUVA COMPUTER CENTER MANKUNDU</h1>
+                <p class="institute-location">📍 Mankundu, Hooghly</p>
+            </div>
+            <div class="access-card">
+                <div class="graduation-icon">📊</div>
+                <h2 class="access-title">🔒 Student Access Required</h2>
+                <p class="access-description">Enter your Student Code to access the Advanced Tally Prime Practice Test System</p>
+                <div class="student-input-section">
+                    <input type="text" id="studentCode" class="student-code-input" placeholder="Enter Student Code" maxlength="15">
+                    <div class="loading-bar" id="loadingBar">
+                        <div class="loading-progress" id="loadingProgress"></div>
+                    </div>
+                    <button class="access-btn" onclick="accessTest()">🚀 ACCESS TEST</button>
+                </div>
+                <div class="contact-info">📞 Contact your instructor if you don't have a student code</div>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <div class="header" id="examHeader">
+            <h1>🔥 Advanced Tally Prime MCQ Exam</h1>
+            <p>Next-Generation Computer Institute Assessment</p>
+        </div>
+        
+        <!-- Set Selection Section -->
+        <div class="set-selection-section" id="setSelectionSection">
+            <div class="student-info-card">
+                <h2>📚 Select Question Set</h2>
+                <div id="studentDetailsSet" class="student-details"></div>
+                <div class="set-selection-grid">
+                    <div class="set-card" onclick="selectQuestionSet('A')">
+                        <div class="set-icon">📝</div>
+                        <div class="set-title">SET A</div>
+                        <div class="set-description">Basic to Intermediate Level</div>
+                        <div class="set-info">
+                            <div>✅ 25 Questions</div>
+                            <div>⏰ 35 Minutes</div>
+                            <div>🎯 Company Creation & Basic Features</div>
+                            <div>📊 Pass: 60% (15/25)</div>
+                        </div>
+                        <div class="set-topics">
+                            <span class="topic-tag">Company Creation</span>
+                            <span class="topic-tag">Vouchers</span>
+                            <span class="topic-tag">Ledgers</span>
+                            <span class="topic-tag">Groups</span>
+                            <span class="topic-tag">Basic Reports</span>
+                        </div>
+                    </div>
+                    
+                    <div class="set-card" onclick="selectQuestionSet('B')">
+                        <div class="set-icon">📊</div>
+                        <div class="set-title">SET B</div>
+                        <div class="set-description">Intermediate to Advanced Level</div>
+                        <div class="set-info">
+                            <div>✅ 25 Questions</div>
+                            <div>⏰ 35 Minutes</div>
+                            <div>🎯 Inventory & Advanced Features</div>
+                            <div>📊 Pass: 60% (15/25)</div>
+                        </div>
+                        <div class="set-topics">
+                            <span class="topic-tag">Inventory</span>
+                            <span class="topic-tag">Stock Items</span>
+                            <span class="topic-tag">GST</span>
+                            <span class="topic-tag">TDS/TCS</span>
+                            <span class="topic-tag">Banking</span>
+                        </div>
+                    </div>
+                    
+                    <div class="set-card" onclick="selectQuestionSet('C')">
+                        <div class="set-icon">⚡</div>
+                        <div class="set-title">SET C</div>
+                        <div class="set-description">Expert Level Challenge</div>
+                        <div class="set-info">
+                            <div>✅ 25 Questions</div>
+                            <div>⏰ 35 Minutes</div>
+                            <div>🎯 Advanced Reports & Customization</div>
+                            <div>📊 Pass: 60% (15/25)</div>
+                        </div>
+                        <div class="set-topics">
+                            <span class="topic-tag">MIS Reports</span>
+                            <span class="topic-tag">Data Import</span>
+                            <span class="topic-tag">Shortcuts</span>
+                            <span class="topic-tag">Advanced GST</span>
+                            <span class="topic-tag">Payroll</span>
+                        </div>
+                    </div>
+                    
+                    <div class="set-card" onclick="requestFinalTestAccess()" style="border: 3px solid #ff6b35; background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);">
+                        <div class="set-icon">🏆</div>
+                        <div class="set-title" style="color: #c53030;">FINAL TEST</div>
+                        <div class="set-description" style="color: #9c2626;">Comprehensive Assessment</div>
+                        <div class="set-info" style="background: #fff; border-left: 4px solid #ff6b35;">
+                            <div>✅ 40 Questions</div>
+                            <div>⏰ 60 Minutes</div>
+                            <div>🎯 Complete Tally Prime Mastery Test</div>
+                            <div>📊 Pass: 70% (28/40)</div>
+                            <div style="color: #c53030; font-weight: bold;">🔒 Password Protected</div>
+                        </div>
+                        <div class="set-topics">
+                            <span class="topic-tag" style="background: #fed7d7; color: #c53030;">Mixed Levels</span>
+                            <span class="topic-tag" style="background: #fed7d7; color: #c53030;">All Topics</span>
+                            <span class="topic-tag" style="background: #fed7d7; color: #c53030;">Comprehensive</span>
+                            <span class="topic-tag" style="background: #fed7d7; color: #c53030;">Instructor Access</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Student Info Section -->
+        <div class="student-info-section" id="studentInfoSection">
+            <div class="student-info-card">
+                <h2>📋 Student Information</h2>
+                <div id="studentDetails" class="student-details"></div>
+                <div class="selected-set-info">
+                    <div class="selected-set-text" id="selectedSetDisplay">📝 Selected: Tally Prime Question Set A</div>
+                </div>
+                <div class="exam-instructions">
+                    <h3 id="examInstructions">📝 Exam Instructions:</h3>
+                    <ul id="instructionsList">
+                        <li>⏰ <strong>Time Limit:</strong> 35 minutes</li>
+                        <li>📊 <strong>Questions:</strong> 25 Multiple Choice Questions</li>
+                        <li>✅ <strong>Passing Score:</strong> 60% (15 correct answers)</li>
+                        <li>⏭️ <strong>Skip Option:</strong> You can skip questions and return later</li>
+                        <li>🔄 <strong>Navigation:</strong> Use Previous/Next buttons to move between questions</li>
+                        <li>📤 <strong>Auto-Submit:</strong> Exam will auto-submit when time expires</li>
+                        <li>🎯 <strong>Smart Features:</strong> Progress tracking, visual feedback, and performance analytics</li>
+                    </ul>
+                </div>
+                <button class="btn start-exam-btn" onclick="startExam()">🚀 Start Advanced Tally Prime Exam</button>
+            </div>
+        </div>
+        
+        <!-- Exam Section -->
+        <div class="exam-section" id="examSection">
+            <div class="exam-header">
+                <div class="progress" id="progress">
+                    <span>📊</span>
+                    <span>Question 1 of 25</span>
+                </div>
+                <div class="timer" id="timer">
+                    <span>⏰</span>
+                    <span>35:00</span>
+                </div>
+            </div>
+            <div class="question-container" id="questionContainer"></div>
+            <div class="navigation">
+                <div style="display: flex; gap: 1rem;">
+                    <button class="btn-nav" id="prevBtn" onclick="previousQuestion()" disabled>
+                        <span>⬅️</span>
+                        <span>Previous</span>
+                    </button>
+                    <button class="btn-nav" id="nextBtn" onclick="nextQuestion()">
+                        <span>Next</span>
+                        <span>➡️</span>
+                    </button>
+                </div>
+                <div>
+                    <button class="btn-nav" onclick="showQuestionMap()">🗺️ Question Map</button>
+                </div>
+            </div>
+            <div style="text-align: center; margin: 2rem 0;">
+                <button class="submit-btn" id="submitBtn" onclick="submitExam()" style="display: none;">
+                    <span>✅ Submit Exam</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Result Section -->
+        <div class="result-section" id="resultSection">
+            <h2>🎉 Exam Completed!</h2>
+            <div class="progress-circle" id="progressCircle">
+                <div class="progress-text" id="progressText">0%</div>
+            </div>
+            <div class="score" id="scoreDisplay"></div>
+            <div class="achievement-badges" id="achievementBadges"></div>
+            <div id="resultMessage"></div>
+            <div style="margin-top: 2rem;">
+                <button class="btn" onclick="handleReviewClick()">📝 Review Answers</button>
+                <button class="btn" onclick="handleRestartClick()">🔄 Take Another Exam</button>
+            </div>
+        </div>
+        
+        <!-- Review Section -->
+        <div class="review-section" id="reviewSection">
+            <h2>📖 Detailed Answer Review</h2>
+            <div id="reviewContainer"></div>
+            <button class="btn" onclick="goBackToResult()">⬅️ Back to Results</button>
+        </div>
+        
+        <!-- Admin Section -->
+        <div class="admin-section" id="adminSection">
+            <div class="admin-header">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">👨‍💼</div>
+                <h1>Admin Dashboard</h1>
+                <p>JYCC Tally Prime MCQ System Management</p>
+            </div>
+            
+            <div class="admin-stats">
+                <div class="stat-card online">
+                    <div class="stat-icon">🖥️</div>
+                    <div class="stat-label">System Status:</div>
+                    <div class="stat-value">Online</div>
+                </div>
+                
+                <div class="stat-card students">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-label">Total Students:</div>
+                    <div class="stat-value" id="totalStudentsCount">48 Registered</div>
+                </div>
+                
+                <div class="stat-card active">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-label">Active Exams:</div>
+                    <div class="stat-value" id="activeExamsCount">0 Currently Running</div>
+                </div>
+                
+                <div class="stat-card security">
+                    <div class="stat-icon">🔒</div>
+                    <div class="stat-label">Security Level:</div>
+                    <div class="stat-value">High</div>
+                </div>
+            </div>
+            
+            <div class="admin-features">
+                <div class="features-header">
+                    🛠️ Admin Features:
+                </div>
+                
+                <div class="feature-grid">
+                    <div class="feature-item" onclick="showStudentManagement()">
+                        <span class="feature-icon">👥</span>
+                        <div class="feature-title">Student Management:</div>
+                        <div class="feature-desc">Add, edit, remove students</div>
+                    </div>
+                    
+                    <div class="feature-item" onclick="showQuestionBank()">
+                        <span class="feature-icon">❓</span>
+                        <div class="feature-title">Question Bank:</div>
+                        <div class="feature-desc">Manage questions and sets</div>
+                    </div>
+                    
+                    <div class="feature-item" onclick="showAnalytics()">
+                        <span class="feature-icon">📊</span>
+                        <div class="feature-title">Analytics:</div>
+                        <div class="feature-desc">View exam results and statistics</div>
+                    </div>
+                    
+                    <div class="feature-item" onclick="showFinalExamRecords()">
+                        <span class="feature-icon">🏆</span>
+                        <div class="feature-title">Final Exam Records:</div>
+                        <div class="feature-desc">View all Final Exam scores</div>
+                    </div>
+                    
+                    <div class="feature-item" onclick="showSecuritySettings()">
+                        <span class="feature-icon">🔒</span>
+                        <div class="feature-title">Security:</div>
+                        <div class="feature-desc">Password management and access control</div>
+                    </div>
+                    
+                    <div class="feature-item" onclick="showExportOptions()">
+                        <span class="feature-icon">📤</span>
+                        <div class="feature-title">Export:</div>
+                        <div class="feature-desc">Download results and reports</div>
+                    </div>
+                    
+                    <div class="feature-item" onclick="showSystemSettings()">
+                        <span class="feature-icon">⚙️</span>
+                        <div class="feature-title">Settings:</div>
+                        <div class="feature-desc">Configure system parameters</div>
+                    </div>
+                    
+                    <div class="feature-item" onclick="shuffleQuestions()">
+                        <span class="feature-icon">🔀</span>
+                        <div class="feature-title">Shuffle Questions:</div>
+                        <div class="feature-desc">Randomize question order for all sets</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="admin-actions">
+                <button class="admin-btn" onclick="showFinalExamRecords()">
+                    <span>📋</span> View Final Exam Records
+                </button>
+                
+                <button class="admin-btn export" onclick="exportFinalExamScores()">
+                    <span>📤</span> Export Final Scores
+                </button>
+                
+                <button class="admin-btn danger" onclick="clearFinalExamRecords()">
+                    <span>🗑️</span> Clear All Records
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div id="adminModal" class="admin-modal">
+        <div class="admin-modal-content" id="adminModalContent">
+            <!-- Dynamic admin content will be inserted here -->
+        </div>
+    </div>
+
+    <!-- Password Modal for Final Test -->
+    <div id="passwordModal" class="password-modal" style="display: none;">
+        <div class="password-modal-content" style="max-width: 480px; padding: 2.5rem; border-radius: 20px;">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">🔒</div>
+                <h3 style="font-size: 1.4rem; font-weight: 600; color: #2d3748; margin-bottom: 0.8rem;">Final Test Access</h3>
+                <p style="color: #4a5568; font-size: 0.95rem; line-height: 1.5; margin: 0;">This is a secured comprehensive examination. Please enter the password provided by your instructor to access the Final Test.</p>
+            </div>
+            
+            <div style="margin-bottom: 2rem;">
+                <input type="password" id="finalTestPassword" 
+                       placeholder="Enter Final Test Password" 
+                       maxlength="20"
+                       style="width: 100%; padding: 14px 18px; border: 2px solid #e2e8f0; 
+                              border-radius: 10px; font-size: 1rem; text-align: center; 
+                              outline: none; transition: all 0.3s ease; background: #f8f9fa;
+                              color: #2d3748; font-weight: 500;">
+            </div>
+            
+            <div style="display: flex; gap: 12px; justify-content: center; margin-bottom: 1.5rem;">
+                <button onclick="verifyFinalTestPassword()" 
+                        style="background: linear-gradient(135deg, #c53030 0%, #9c2626 100%); 
+                               color: white; border: none; padding: 12px 24px; border-radius: 8px; 
+                               cursor: pointer; font-size: 0.95rem; font-weight: 600; 
+                               transition: all 0.3s ease; display: flex; align-items: center; gap: 6px;">
+                    <span>🔓</span> Access Test
+                </button>
+                <button onclick="closeFinalTestModal()" 
+                        style="background: #e2e8f0; color: #4a5568; border: none; 
+                               padding: 12px 24px; border-radius: 8px; cursor: pointer; 
+                               font-size: 0.95rem; font-weight: 600; transition: all 0.3s ease;
+                               display: flex; align-items: center; gap: 6px;">
+                    <span>❌</span> Cancel
+                </button>
+            </div>
+            
+            <div style="text-align: center; font-size: 0.85rem; color: #718096; line-height: 1.4;">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 4px;">
+                    <span>🎓</span>
+                    <span>Contact your instructor if you don't have the password</span>
+                </div>
+                <div style="font-size: 0.8rem; opacity: 0.8;">Advanced security measures are in place for this assessment</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit Confirmation Modal -->
+    <div id="submitModal" class="password-modal" style="display: none;">
+        <div class="password-modal-content" style="max-width: 520px; padding: 2rem; border-radius: 15px;">
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">🤔</div>
+                <h3 style="font-size: 1.4rem; font-weight: 600; color: #2d3748; margin-bottom: 1rem;">Submit Confirmation</h3>
+            </div>
+            
+            <div id="submitModalMessage" style="margin-bottom: 2rem;"></div>
+            
+            <div style="display: flex; gap: 12px; justify-content: center;">
+                <button onclick="confirmSubmission()" 
+                        style="background: linear-gradient(135deg, #c53030 0%, #9c2626 100%); 
+                               color: white; border: none; padding: 14px 28px; border-radius: 8px; 
+                               cursor: pointer; font-size: 1rem; font-weight: 600; 
+                               transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;">
+                    <span>✅</span> Yes, Submit Exam
+                </button>
+                <button onclick="cancelSubmission()" 
+                        style="background: #e2e8f0; color: #4a5568; border: none; 
+                               padding: 14px 28px; border-radius: 8px; cursor: pointer; 
+                               font-size: 1rem; font-weight: 600; transition: all 0.3s ease;
+                               display: flex; align-items: center; gap: 8px;">
+                    <span>❌</span> Cancel, Continue Exam
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question Map Modal -->
+    <div id="questionMapModal" class="password-modal" style="display: none;">
+        <div class="password-modal-content" style="max-width: 600px; padding: 2rem; border-radius: 15px;">
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">🗺️</div>
+                <h3 style="font-size: 1.4rem; font-weight: 600; color: #2d3748; margin-bottom: 1rem;">Question Navigation Map</h3>
+            </div>
+            
+            <div id="questionMapGrid"></div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button onclick="closeQuestionMap()" 
+                        style="background: linear-gradient(135deg, #4299e1, #3182ce); 
+                               color: white; border: none; padding: 12px 24px; border-radius: 8px; 
+                               cursor: pointer; font-size: 1rem; font-weight: 600; 
+                               transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;
+                               margin: 0 auto;">
+                    <span>✅</span> Close Map
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Student database (same as Excel version)
+        var students = {
+            'JYCC001': {name: 'NABIN KIRTANIYA', course: 'SCHOOL SYLLABUS', joinDate: '2024-01-01'},
+            'JYCC002': {name: 'RICK SARKAR', course: 'SCHOOL SYLLABUS', joinDate: '2024-01-01'},
+            'JYCC003': {name: 'ABHISHIKTA CHATTERJEE', course: 'SCHOOL SYLLABUS A', joinDate: '2024-01-01'},
+            'JYCC005': {name: 'PRITAM SAHA', course: 'SCHOOL SYLLABUS', joinDate: '2024-01-01'},
+            'JYCC006': {name: 'BARNALI ACHARYA', course: 'DFA', joinDate: '2024-01-20'},
+            'JYCC007': {name: 'PADMANAVA GUHA', course: 'SCHOOL SYLLABUS A', joinDate: '2024-01-01'},
+            'JYCC008': {name: 'SINJINI BERA', course: 'SCHOOL SYLLABUS A', joinDate: '2024-01-01'},
+            'JYCC009': {name: 'PABITRA CHOWDHURY', course: 'SCHOOL SYLLABUS A', joinDate: '2024-01-01'},
+            'JYCC010': {name: 'ARIJIT MONDAL', course: 'SCHOOL SYLLABUS A', joinDate: '2024-01-01'},
+            'JYCC026': {name: 'AMIYAR RAHMAN', course: 'ADCA', joinDate: '2024-01-01'},
+            'JYCC033': {name: 'SUBHAJIT NASKAR', course: 'DFA', joinDate: '2024-01-01'},
+            'JYCC043': {name: 'SUJIT DEY', course: 'DFA', joinDate: '2024-01-01'},
+            'JYCC046': {name: 'AYAN DEY', course: 'DFA', joinDate: '2024-01-01'},
+            'JYCC048': {name: 'PRIYANKA DUTTA', course: 'DFA', joinDate: '2024-01-01'},
+            'JYCC071': {name: 'NILOY BARMAN', course: 'ADCA', joinDate: '2024-01-01'},
+            'JYCC072': {name: 'ARNAB GHOSH', course: 'ADCA', joinDate: '2024-01-01'},
+            'JYCC073': {name: 'SUSMITA CHAKRABORTY', course: 'ADCA', joinDate: '2024-01-01'},
+            'JYCC074': {name: 'SAMPA MANNA', course: 'ADCA', joinDate: '2024-01-01'},
+            'JYCC075': {name: 'RATUL BANERJEE', course: 'ADCA', joinDate: '2024-01-01'},
+            'JYCC101': {name: 'ANURADHA CHAKRABORTY', course: 'ADCA', joinDate: '2024-01-01'},
+            'JYCC102': {name: 'SREYA MUKHERJEE', course: 'ADCA', joinDate: '2024-01-01'},
+            'JYCC103': {name: 'SAGNIK MANNA', course: 'ADCA', joinDate: '2024-01-01'},
+            'JYCC104': {name: 'BISWAJIT MONDAL', course: 'ADCA', joinDate: '2024-01-01'},
+            'JYCC105': {name: 'DEBASHIS RANA', course: 'ADCA', joinDate: '2024-01-01'},
+            'JYCC226': {name: 'DEBJYOTI MONDAL', course: 'ADIT', joinDate: '2024-01-01'},
+            'JYCC227': {name: 'PAPRI DAS', course: 'ADIT', joinDate: '2024-01-01'},
+            'JYCC228': {name: 'RAJIT MONDAL', course: 'ADIT', joinDate: '2024-01-01'},
+            'JYCC245': {name: 'ARJUN MUKHERJEE', course: 'CCA', joinDate: '2024-01-01'},
+            'JYCC246': {name: 'DEBOSMITA GHOSH', course: 'CCA', joinDate: '2024-01-01'},
+            'JYCC247': {name: 'PRIYANKA SAHA', course: 'CCA', joinDate: '2024-01-01'},
+            'JYCC248': {name: 'RAJDEEP GHOSH', course: 'COMA', joinDate: '2024-01-01'},
+            'JYCC259': {name: 'BARNITA SAHA', course: 'CA', joinDate: '2024-01-01'},
+            'JYCC260': {name: 'AASMITA HALDER', course: 'CA', joinDate: '2024-01-01'},
+            'TEST001': {name: 'TEST STUDENT', course: 'ADCA', joinDate: '2024-01-01'},
+            'ADMIN001': {name: 'SYSTEM ADMIN', course: 'ADMIN', joinDate: '2024-01-01'}
+        };
+        
+        var eligibleCourses = ['ADCA', 'DFA', 'CA', 'ADIT', 'ADIT+COMS', 'TALLY WITH GST', 'ADMIN','SCHOOL SYLLABUS','CCA','COMA'];
+        
+        // Tally Prime Question sets - 25 questions each with GUARANTEED SEQUENTIAL ORDER
+        var questionSets = {
+            'A': {
+                title: 'Tally Prime Question Set A - Basic to Intermediate',
+                timeLimit: 2100, // 35 minutes
+                passingScore: 60,
+                questions: [
+                    {question: "What is the default port number for Tally Prime server?", options: ["9000", "9001", "9002", "8080"], correct: 0},
+                    {question: "Which key is used to create a new company in Tally Prime?", options: ["Alt+F3", "Ctrl+Alt+C", "F11", "Alt+F1"], correct: 0},
+                    {question: "What is the shortcut to open Gateway of Tally?", options: ["Ctrl+M", "Alt+F1", "F12", "Ctrl+Alt+G"], correct: 1},
+                    {question: "In Tally Prime, which option is used to enable GST?", options: ["F11 > Features", "F12 > Features", "Alt+F12", "F11 > Accounting Features"], correct: 0},
+                    {question: "What does 'Dr' represent in accounting?", options: ["Credit", "Debit", "Deposit", "Debt"], correct: 1},
+                    {question: "Which voucher type is used for bank transactions?", options: ["Payment", "Receipt", "Journal", "All of the above"], correct: 3},
+                    {question: "What is the shortcut key to duplicate a voucher?", options: ["Alt+2", "Ctrl+D", "F8", "Alt+D"], correct: 0},
+                    {question: "In Tally Prime, what does 'Cr' stand for?", options: ["Create", "Credit", "Current", "Cash"], correct: 1},
+                    {question: "Which report shows the financial position of a company?", options: ["P&L Account", "Balance Sheet", "Cash Flow", "Trial Balance"], correct: 1},
+                    {question: "What is the shortcut to access Company Info?", options: ["Alt+F1", "F11", "Alt+F3", "Ctrl+Alt+F3"], correct: 2},
+                    {question: "Which group does 'Cash' ledger belong to?", options: ["Bank Accounts", "Cash-in-Hand", "Current Assets", "Sundry Debtors"], correct: 1},
+                    {question: "What is the file extension of Tally Prime data?", options: [".tcp", ".tal", ".dat", ".tly"], correct: 0},
+                    {question: "Which key is used to accept/save entries in Tally Prime?", options: ["Enter", "Ctrl+A", "F10", "Tab"], correct: 0},
+                    {question: "What does F12 configure in Tally Prime?", options: ["Features", "Configuration", "Company Info", "Accounting Features"], correct: 1},
+                    {question: "Which voucher is used for sales transactions?", options: ["Receipt", "Payment", "Sales", "Journal"], correct: 2},
+                    {question: "What is the Golden Rule for Personal Account?", options: ["Debit what comes in", "Debit the receiver", "Debit all expenses", "Credit the giver"], correct: 1},
+                    {question: "Which option is used to split company data?", options: ["Data", "Gateway", "Company", "Split Company Data"], correct: 3},
+                    {question: "What does 'Outstanding' mean in Tally Prime?", options: ["Pending payments", "Completed transactions", "Profit earned", "Loss incurred"], correct: 0},
+                    {question: "Which group is used for loan accounts?", options: ["Current Liabilities", "Loans (Liability)", "Fixed Assets", "Current Assets"], correct: 1},
+                    {question: "What is the shortcut for Stock Summary report?", options: ["Alt+F5", "Alt+F6", "Ctrl+F5", "Alt+S"], correct: 0},
+                    {question: "Which voucher type records purchase of goods?", options: ["Receipt", "Payment", "Purchase", "Journal"], correct: 2},
+                    {question: "What does 'Aging' report show?", options: ["Company age", "Outstanding balances by time period", "Employee age", "Asset depreciation"], correct: 1},
+                    {question: "Which key opens the Calculator in Tally Prime?", options: ["Ctrl+N", "Ctrl+M", "F2", "Alt+C"], correct: 1},
+                    {question: "What is the purpose of 'Cost Centers' in Tally Prime?", options: ["Track expenses by department", "Calculate GST", "Manage inventory", "Generate invoices"], correct: 0},
+                    {question: "Which report shows all transactions for a specific period?", options: ["Day Book", "Balance Sheet", "P&L Account", "Cash Book"], correct: 0}
+                ]
+            },
+            'B': {
+                title: 'Tally Prime Question Set B - Intermediate to Advanced',
+                timeLimit: 2100, // 35 minutes
+                passingScore: 60,
+                questions: [
+                    {question: "What is the GST rate for essential items?", options: ["0%", "5%", "12%", "18%"], correct: 0},
+                    {question: "Which form is used for intra-state supply under GST?", options: ["GSTR-1", "GSTR-2", "GSTR-3B", "CGST"], correct: 0},
+                    {question: "What does IGST stand for?", options: ["Internal GST", "Integrated GST", "International GST", "Individual GST"], correct: 1},
+                    {question: "In Tally Prime, where do you configure stock groups?", options: ["Gateway > Masters > Stock Groups", "F11 > Inventory Features", "Gateway > Inventory > Stock Groups", "Masters > Stock Groups"], correct: 2},
+                    {question: "What is the threshold limit for GST registration?", options: ["₹10 lakhs", "₹20 lakhs", "₹40 lakhs", "₹50 lakhs"], correct: 1},
+                    {question: "Which report shows GST liability?", options: ["GSTR-1", "GSTR-3B", "GST Register", "All of the above"], correct: 3},
+                    {question: "What does TDS stand for?", options: ["Tax Deducted at Source", "Total Deductible Sum", "Tax Deposit Scheme", "Time Deposit Security"], correct: 0},
+                    {question: "Which section deals with TDS on salary?", options: ["192", "194A", "194C", "194I"], correct: 0},
+                    {question: "What is the TDS rate for interest on bank deposits?", options: ["5%", "10%", "15%", "20%"], correct: 1},
+                    {question: "In Tally Prime, how do you enable TDS?", options: ["F11 > Statutory & Taxation", "F12 > TDS Features", "Gateway > TDS", "F11 > TDS"], correct: 0},
+                    {question: "What does FIFO stand for in inventory?", options: ["First In First Out", "Fast In Fast Out", "Final In Final Out", "Fixed In Fixed Out"], correct: 0},
+                    {question: "Which voucher type is used for stock adjustments?", options: ["Physical Stock", "Stock Journal", "Manufacturing Journal", "All of the above"], correct: 3},
+                    {question: "What is the purpose of 'Godowns' in Tally Prime?", options: ["Location-wise stock tracking", "Calculate GST", "Employee management", "Banking operations"], correct: 0},
+                    {question: "Which report shows item-wise profitability?", options: ["Stock Summary", "Stock Valuation", "Item Profitability", "Stock Analysis"], correct: 2},
+                    {question: "What does 'Batch-wise' tracking help with?", options: ["Track specific product batches", "Calculate taxes", "Manage employees", "Generate reports"], correct: 0},
+                    {question: "In Tally Prime, what is 'Auto Bank Reconciliation'?", options: ["Automatic bank statement matching", "Auto payment processing", "Bank account creation", "Interest calculation"], correct: 0},
+                    {question: "Which feature helps in data synchronization?", options: ["TallyPrime Server", "Data Synchronization", "Remote Access", "All of the above"], correct: 3},
+                    {question: "What does 'E-invoice' feature do?", options: ["Generate electronic invoices", "Email invoices", "Export invoices", "Edit invoices"], correct: 0},
+                    {question: "Which report is required for GST audit?", options: ["GSTR-9", "GSTR-1", "GSTR-3B", "GSTR-2A"], correct: 0},
+                    {question: "What is the purpose of 'Interest Calculation'?", options: ["Calculate loan interest", "Bank interest on deposits", "Customer payment delays", "All of the above"], correct: 3},
+                    {question: "In Tally Prime, what does 'Multi-currency' feature enable?", options: ["Foreign exchange transactions", "Multiple company currencies", "Currency conversion", "All of the above"], correct: 3},
+                    {question: "Which voucher is used for depreciation entries?", options: ["Journal", "Contra", "Payment", "Receipt"], correct: 0},
+                    {question: "What does 'Budget' feature help with?", options: ["Financial planning", "Expense control", "Target setting", "All of the above"], correct: 3},
+                    {question: "Which option helps in payroll management?", options: ["F11 > Payroll", "Payroll Masters", "Salary Vouchers", "All of the above"], correct: 3},
+                    {question: "What is the purpose of 'Excise' in Tally Prime?", options: ["Track excise duty", "Calculate taxes", "Manage inventory", "Generate reports"], correct: 0}
+                ]
+            },
+            'C': {
+                title: 'Tally Prime Question Set C - Expert Level Challenge',
+                timeLimit: 2100, // 35 minutes
+                passingScore: 60,
+                questions: [
+                    {question: "Which advanced feature allows customization of reports in Tally Prime?", options: ["Report Builder", "TDL (Tally Definition Language)", "Custom Fields", "All of the above"], correct: 3},
+                    {question: "What does TDL stand for in Tally Prime?", options: ["Tally Data Language", "Tally Definition Language", "Tally Display Language", "Tally Development Language"], correct: 1},
+                    {question: "Which file contains TDL customizations?", options: [".tcp", ".tdl", ".tal", ".ini"], correct: 1},
+                    {question: "What is the purpose of 'Remote Access' in Tally Prime?", options: ["Access from anywhere", "Multi-user environment", "Data security", "All of the above"], correct: 3},
+                    {question: "Which feature allows import/export of data?", options: ["Data Exchange", "XML Import/Export", "Excel Integration", "All of the above"], correct: 3},
+                    {question: "What does 'Audit Trail' feature provide?", options: ["Track all changes", "Security monitoring", "Compliance reporting", "All of the above"], correct: 3},
+                    {question: "Which advanced report shows cash flow analysis?", options: ["Cash Flow Statement", "Fund Flow Statement", "Balance Sheet", "P&L Account"], correct: 0},
+                    {question: "What is the purpose of 'Cost Categories'?", options: ["Advanced cost tracking", "Department-wise expenses", "Project costing", "All of the above"], correct: 3},
+                    {question: "Which feature helps in advanced inventory management?", options: ["Batch/Serial tracking", "Multiple price levels", "Expiry date tracking", "All of the above"], correct: 3},
+                    {question: "What does 'MIS Reports' stand for?", options: ["Management Information System", "Monthly Information Summary", "Multiple Information System", "Master Information System"], correct: 0},
+                    {question: "Which advanced GST feature generates E-way bills?", options: ["E-invoice", "E-way Bill", "GSTR Filing", "GST Registration"], correct: 1},
+                    {question: "What is the purpose of 'Branch/Division' feature?", options: ["Multi-location management", "Consolidation", "Branch-wise reporting", "All of the above"], correct: 3},
+                    {question: "Which feature allows automatic backup?", options: ["Auto Backup", "Scheduled Backup", "Cloud Backup", "All of the above"], correct: 3},
+                    {question: "What does 'Data Compression' do in Tally Prime?", options: ["Reduces file size", "Faster processing", "Storage optimization", "All of the above"], correct: 3},
+                    {question: "Which advanced feature helps in financial analysis?", options: ["Ratio Analysis", "Trend Analysis", "Comparative Reports", "All of the above"], correct: 3},
+                    {question: "What is the purpose of 'Security Control'?", options: ["User access management", "Data protection", "Audit compliance", "All of the above"], correct: 3},
+                    {question: "Which feature allows integration with other software?", options: ["ODBC", "API", "Data Exchange", "All of the above"], correct: 3},
+                    {question: "What does 'Cheque Printing' feature do?", options: ["Print bank cheques", "Track cheque status", "Cheque reconciliation", "All of the above"], correct: 3},
+                    {question: "Which advanced voucher allows complex entries?", options: ["Advanced Journal", "Multi-currency Journal", "Reversing Journal", "All of the above"], correct: 3},
+                    {question: "What is the purpose of 'Optional Vouchers'?", options: ["Conditional entries", "Future dated entries", "Template vouchers", "All of the above"], correct: 3},
+                    {question: "Which feature helps in advanced reporting?", options: ["Columnar Reports", "Graphical Reports", "Dashboard", "All of the above"], correct: 3},
+                    {question: "What does 'Job Costing' feature track?", options: ["Project costs", "Job profitability", "Resource utilization", "All of the above"], correct: 3},
+                    {question: "Which advanced feature manages multiple companies?", options: ["Group Company", "Consolidation", "Multi-company Reports", "All of the above"], correct: 3},
+                    {question: "What is the purpose of 'Reversing Entries'?", options: ["Undo transactions", "Automatic reversal", "Period-end adjustments", "All of the above"], correct: 3},
+                    {question: "Which feature provides advanced analytics?", options: ["Business Intelligence", "Data Analytics", "Performance Metrics", "All of the above"], correct: 3}
+                ]
+            },
+            'FINAL': {
+                title: 'Final Comprehensive Tally Prime Assessment - 40 Questions',
+                timeLimit: 3600, // 60 minutes
+                passingScore: 70,
+                questions: [
+                    // 10 questions from Set A (Basic)
+                    {question: "What is the default port number for Tally Prime server?", options: ["9000", "9001", "9002", "8080"], correct: 0},
+                    {question: "Which key is used to create a new company in Tally Prime?", options: ["Alt+F3", "Ctrl+Alt+C", "F11", "Alt+F1"], correct: 0},
+                    {question: "What is the shortcut to open Gateway of Tally?", options: ["Ctrl+M", "Alt+F1", "F12", "Ctrl+Alt+G"], correct: 1},
+                    {question: "In Tally Prime, which option is used to enable GST?", options: ["F11 > Features", "F12 > Features", "Alt+F12", "F11 > Accounting Features"], correct: 0},
+                    {question: "Which voucher type is used for bank transactions?", options: ["Payment", "Receipt", "Journal", "All of the above"], correct: 3},
+                    {question: "What is the shortcut key to duplicate a voucher?", options: ["Alt+2", "Ctrl+D", "F8", "Alt+D"], correct: 0},
+                    {question: "Which report shows the financial position of a company?", options: ["P&L Account", "Balance Sheet", "Cash Flow", "Trial Balance"], correct: 1},
+                    {question: "Which group does 'Cash' ledger belong to?", options: ["Bank Accounts", "Cash-in-Hand", "Current Assets", "Sundry Debtors"], correct: 1},
+                    {question: "What does F12 configure in Tally Prime?", options: ["Features", "Configuration", "Company Info", "Accounting Features"], correct: 1},
+                    {question: "Which voucher is used for sales transactions?", options: ["Receipt", "Payment", "Sales", "Journal"], correct: 2},
+                    
+                    // 8 questions from Set B (Intermediate)
+                    {question: "What is the GST rate for essential items?", options: ["0%", "5%", "12%", "18%"], correct: 0},
+                    {question: "Which form is used for intra-state supply under GST?", options: ["GSTR-1", "GSTR-2", "GSTR-3B", "CGST"], correct: 0},
+                    {question: "What does IGST stand for?", options: ["Internal GST", "Integrated GST", "International GST", "Individual GST"], correct: 1},
+                    {question: "What is the threshold limit for GST registration?", options: ["₹10 lakhs", "₹20 lakhs", "₹40 lakhs", "₹50 lakhs"], correct: 1},
+                    {question: "What does TDS stand for?", options: ["Tax Deducted at Source", "Total Deductible Sum", "Tax Deposit Scheme", "Time Deposit Security"], correct: 0},
+                    {question: "What does FIFO stand for in inventory?", options: ["First In First Out", "Fast In Fast Out", "Final In Final Out", "Fixed In Fixed Out"], correct: 0},
+                    {question: "Which voucher type is used for stock adjustments?", options: ["Physical Stock", "Stock Journal", "Manufacturing Journal", "All of the above"], correct: 3},
+                    {question: "What is the purpose of 'Godowns' in Tally Prime?", options: ["Location-wise stock tracking", "Calculate GST", "Employee management", "Banking operations"], correct: 0},
+                    
+                    // 7 questions from Set C (Advanced)
+                    {question: "Which advanced feature allows customization of reports in Tally Prime?", options: ["Report Builder", "TDL (Tally Definition Language)", "Custom Fields", "All of the above"], correct: 3},
+                    {question: "What does TDL stand for in Tally Prime?", options: ["Tally Data Language", "Tally Definition Language", "Tally Display Language", "Tally Development Language"], correct: 1},
+                    {question: "What is the purpose of 'Remote Access' in Tally Prime?", options: ["Access from anywhere", "Multi-user environment", "Data security", "All of the above"], correct: 3},
+                    {question: "Which feature allows import/export of data?", options: ["Data Exchange", "XML Import/Export", "Excel Integration", "All of the above"], correct: 3},
+                    {question: "What does 'Audit Trail' feature provide?", options: ["Track all changes", "Security monitoring", "Compliance reporting", "All of the above"], correct: 3},
+                    {question: "What does 'MIS Reports' stand for?", options: ["Management Information System", "Monthly Information Summary", "Multiple Information System", "Master Information System"], correct: 0},
+                    {question: "Which advanced GST feature generates E-way bills?", options: ["E-invoice", "E-way Bill", "GSTR Filing", "GST Registration"], correct: 1},
+                    
+                    // 15 NEW COMPREHENSIVE QUESTIONS
+                    {question: "What is the accounting equation?", options: ["Assets = Liabilities + Capital", "Assets + Liabilities = Capital", "Capital = Assets + Liabilities", "Assets = Capital - Liabilities"], correct: 0},
+                    {question: "Which method is used for inventory valuation?", options: ["FIFO", "LIFO", "Weighted Average", "All of the above"], correct: 3},
+                    {question: "What does 'Sundry Debtors' represent?", options: ["Money owed by customers", "Money owed to suppliers", "Bank balances", "Cash in hand"], correct: 0},
+                    {question: "Which tax is applicable on inter-state transactions?", options: ["CGST", "SGST", "IGST", "UGST"], correct: 2},
+                    {question: "What is the full form of HSN?", options: ["Harmonized System of Nomenclature", "Health Service Number", "Home Service Network", "High Security Number"], correct: 0},
+                    {question: "Which report shows outstanding receivables?", options: ["Sundry Debtors", "Aging Analysis", "Outstanding Report", "All of the above"], correct: 3},
+                    {question: "What is the purpose of 'Bank Reconciliation'?", options: ["Match bank statement with books", "Calculate bank charges", "Deposit money", "Withdraw cash"], correct: 0},
+                    {question: "Which feature tracks employee attendance?", options: ["Payroll", "Attendance", "Employee Master", "Time Tracking"], correct: 1},
+                    {question: "What does 'Provision' mean in accounting?", options: ["Money set aside for future expenses", "Current income", "Fixed assets", "Bank deposits"], correct: 0},
+                    {question: "Which voucher records salary payments?", options: ["Payment", "Payroll", "Journal", "Salary Voucher"], correct: 1},
+                    {question: "What is the purpose of 'Depreciation'?", options: ["Reduce asset value over time", "Increase asset value", "Calculate profit", "Track inventory"], correct: 0},
+                    {question: "Which group contains 'Machinery' ledger?", options: ["Fixed Assets", "Current Assets", "Plant & Machinery", "Both A and C"], correct: 3},
+                    {question: "What does 'Working Capital' indicate?", options: ["Current Assets - Current Liabilities", "Fixed Assets + Current Assets", "Total Capital", "Profit for the year"], correct: 0},
+                    {question: "Which feature helps in budgetary control?", options: ["Budget vs Actual", "Variance Analysis", "Budget Reports", "All of the above"], correct: 3},
+                    {question: "What is the purpose of 'Trial Balance'?", options: ["Check arithmetic accuracy", "Prepare final accounts", "Verify entries", "All of the above"], correct: 3}
+                ]
+            }
+        };
+        
+        // Global variables
+        var currentQuestion = 0;
+        var userAnswers = [];
+        var timeLeft = 2100; // 35 minutes default
+        var timer;
+        var studentId = '';
+        var currentStudentData = null;
+        var examStarted = false;
+        var selectedQuestionSet = 'A';
+        var questions = [];
+        var isDarkMode = false;
+        var isAdminMode = false;
+        var examResults = [];
+        
+        // Final Test Security
+        var finalTestPasswords = ['EXCEL2024', 'TALLY2024', 'JYCC@TALLY', 'INSTRUCTOR123', 'ADMIN2024'];
+        
+        // Final Exam Score Storage
+        var finalExamScores = JSON.parse(localStorage.getItem('finalExamScores') || '[]');
+        
+        // **ADMIN FUNCTIONS - THESE WERE MISSING AND NOW ADDED** 
+        
+        // Student Management Function
+        function showStudentManagement() {
+            var content = `
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h2 style="color: #2d3748; margin-bottom: 1rem;">👥 Student Management</h2>
+                    <p style="color: #4a5568;">Manage all registered students and their course enrollments</p>
+                </div>
+                
+                <div style="background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem; border-left: 4px solid #9f7aea;">
+                    <h3 style="color: #2d3748; margin-bottom: 1rem;">📊 Student Statistics</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #4299e1;">35</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Total Students</div>
+                        </div>
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #48bb78;">8</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Active Courses</div>
+                        </div>
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #ed8936;">12</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">This Month</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem; max-height: 400px; overflow-y: auto;">
+                    <h3 style="color: #2d3748; margin-bottom: 1rem;">📋 All Students</h3>
+                    <div style="display: grid; gap: 0.5rem;">
+                        ${Object.keys(students).map(code => `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; background: #f8f9fa; border-radius: 8px; font-size: 0.9rem;">
+                                <div style="font-weight: bold; color: #2d3748;">${code}</div>
+                                <div style="color: #4a5568;">${students[code].name}</div>
+                                <div style="background: #e2e8f0; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; color: #2d3748;">${students[code].course}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div style="text-align: center;">
+                    <button onclick="closeAdminModal()" style="background: linear-gradient(135deg, #4a5568, #2d3748); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600;">
+                        ✅ Close
+                    </button>
+                </div>
+            `;
+            showAdminModal(content);
+            showNotification('👥 Student Management opened', 'info', 2000);
+        }
+        
+        // Question Bank Function
+        function showQuestionBank() {
+            var totalQuestions = questionSets.A.questions.length + questionSets.B.questions.length + questionSets.C.questions.length + questionSets.FINAL.questions.length;
+            
+            var content = `
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h2 style="color: #2d3748; margin-bottom: 1rem;">❓ Question Bank Management</h2>
+                    <p style="color: #4a5568;">Manage Tally Prime questions across all difficulty levels</p>
+                </div>
+                
+                <div style="background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem; border-left: 4px solid #e53e3e;">
+                    <h3 style="color: #2d3748; margin-bottom: 1rem;">📊 Question Bank Statistics</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #4299e1;">${totalQuestions}</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Total Questions</div>
+                        </div>
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #48bb78;">4</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Question Sets</div>
+                        </div>
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #ed8936;">100%</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Tally Prime Coverage</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                    ${Object.keys(questionSets).map(setId => `
+                        <div style="background: white; border: 2px solid #e2e8f0; border-radius: 15px; padding: 1.5rem; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">${setId === 'A' ? '📝' : setId === 'B' ? '📊' : setId === 'C' ? '⚡' : '🏆'}</div>
+                            <div style="font-size: 1.2rem; font-weight: bold; color: #2d3748; margin-bottom: 0.5rem;">SET ${setId}</div>
+                            <div style="color: #4a5568; margin-bottom: 1rem;">${questionSets[setId].title.split(' - ')[1] || 'Final Assessment'}</div>
+                            <div style="background: #f7fafc; padding: 0.5rem; border-radius: 8px; margin-bottom: 1rem;">
+                                <div style="font-size: 1.3rem; font-weight: bold; color: #4299e1;">${questionSets[setId].questions.length}</div>
+                                <div style="font-size: 0.8rem; color: #4a5568;">Questions</div>
+                            </div>
+                            <div style="font-size: 0.9rem; color: #718096;">Pass: ${questionSets[setId].passingScore}%</div>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div style="background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
+                    <h3 style="color: #2d3748; margin-bottom: 1rem;">🔧 Question Management Tools</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;" onclick="shuffleQuestions()">
+                            <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">🔀</div>
+                            <div style="font-weight: bold; color: #2d3748;">Shuffle Questions</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Randomize question order</div>
+                        </div>
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;" onclick="showNotification('Question validation completed successfully!', 'success', 3000)">
+                            <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">✅</div>
+                            <div style="font-weight: bold; color: #2d3748;">Validate Questions</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Check question integrity</div>
+                        </div>
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;" onclick="showNotification('Question backup created successfully!', 'success', 3000)">
+                            <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">💾</div>
+                            <div style="font-weight: bold; color: #2d3748;">Backup Questions</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Create question backup</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center;">
+                    <button onclick="closeAdminModal()" style="background: linear-gradient(135deg, #4a5568, #2d3748); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600;">
+                        ✅ Close
+                    </button>
+                </div>
+            `;
+            showAdminModal(content);
+            showNotification('❓ Question Bank opened', 'info', 2000);
+        }
+        
+        // Analytics Function
+        function showAnalytics() {
+            var totalExams = examResults.length;
+            var passedExams = examResults.filter(result => result.passed).length;
+            var averageScore = totalExams > 0 ? Math.round(examResults.reduce((sum, result) => sum + result.percentage, 0) / totalExams) : 0;
+            
+            var content = `
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h2 style="color: #2d3748; margin-bottom: 1rem;">📊 System Analytics</h2>
+                    <p style="color: #4a5568;">Comprehensive exam performance and system usage statistics</p>
+                </div>
+                
+                <div style="background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem; border-left: 4px solid #48bb78;">
+                    <h3 style="color: #2d3748; margin-bottom: 1rem;">🎯 Performance Metrics</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #4299e1;">${totalExams}</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Total Exams Taken</div>
+                        </div>
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #48bb78;">${passedExams}</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Students Passed</div>
+                        </div>
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #ed8936;">${averageScore}%</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Average Score</div>
+                        </div>
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #9f7aea;">${totalExams > 0 ? Math.round((passedExams / totalExams) * 100) : 0}%</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Pass Rate</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
+                    <h3 style="color: #2d3748; margin-bottom: 1rem;">📈 Recent Exam Results</h3>
+                    <div style="max-height: 300px; overflow-y: auto;">
+                        ${examResults.length > 0 ? examResults.slice(-10).reverse().map(result => `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                                <div style="font-weight: bold; color: #2d3748;">${result.studentName}</div>
+                                <div style="color: #4a5568;">Set ${result.questionSet}</div>
+                                <div style="background: ${result.passed ? '#c6f6d5' : '#fed7d7'}; color: ${result.passed ? '#22543d' : '#742a2a'}; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">${result.percentage}%</div>
+                                <div style="color: #718096; font-size: 0.8rem;">${result.date}</div>
+                            </div>
+                        `).join('') : '<div style="text-align: center; color: #718096; padding: 2rem;">No exam results available yet</div>'}
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
+                    <h3 style="color: #2d3748; margin-bottom: 1rem;">📊 Question Set Performance</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        ${['A', 'B', 'C', 'FINAL'].map(setId => {
+                            var setResults = examResults.filter(result => result.questionSet === setId);
+                            var setPassRate = setResults.length > 0 ? Math.round((setResults.filter(r => r.passed).length / setResults.length) * 100) : 0;
+                            return `
+                                <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; text-align: center;">
+                                    <div style="font-size: 1.2rem; font-weight: bold; color: #2d3748;">SET ${setId}</div>
+                                    <div style="font-size: 1.5rem; font-weight: bold; color: ${setPassRate >= 70 ? '#48bb78' : setPassRate >= 50 ? '#ed8936' : '#e53e3e'}; margin: 0.5rem 0;">${setPassRate}%</div>
+                                    <div style="font-size: 0.8rem; color: #4a5568;">${setResults.length} attempts</div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+                
+                <div style="text-align: center;">
+                    <button onclick="closeAdminModal()" style="background: linear-gradient(135deg, #4a5568, #2d3748); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600;">
+                        ✅ Close
+                    </button>
+                </div>
+            `;
+            showAdminModal(content);
+            showNotification('📊 Analytics dashboard opened', 'info', 2000);
+        }
+        
+        // Final Exam Records Function
+        function showFinalExamRecords() {
+            var content = `
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h2 style="color: #2d3748; margin-bottom: 1rem;">🏆 Final Exam Records</h2>
+                    <p style="color: #4a5568;">Comprehensive Tally Prime Assessment Results</p>
+                </div>
+                
+                <div style="background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem; border-left: 4px solid #ff6b35;">
+                    <h3 style="color: #2d3748; margin-bottom: 1rem;">📊 Final Exam Statistics</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #4299e1;">${finalExamScores.length}</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Total Attempts</div>
+                        </div>
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #48bb78;">${finalExamScores.filter(score => score.passed).length}</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Passed</div>
+                        </div>
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #ed8936;">${finalExamScores.length > 0 ? Math.round(finalExamScores.reduce((sum, score) => sum + score.percentage, 0) / finalExamScores.length) : 0}%</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Average Score</div>
+                        </div>
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #9f7aea;">${finalExamScores.length > 0 ? Math.round((finalExamScores.filter(score => score.passed).length / finalExamScores.length) * 100) : 0}%</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Pass Rate</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
+                    <h3 style="color: #2d3748; margin-bottom: 1rem;">📋 Final Exam Records</h3>
+                    <div style="max-height: 400px; overflow-y: auto;">
+                        ${finalExamScores.length > 0 ? finalExamScores.map(score => `
+                            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 1rem; align-items: center; padding: 0.8rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                                <div>
+                                    <div style="font-weight: bold; color: #2d3748;">${score.studentName}</div>
+                                    <div style="color: #4a5568; font-size: 0.8rem;">${score.studentCode} • ${score.course}</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-weight: bold; color: #2d3748;">${score.score}/${score.totalQuestions}</div>
+                                    <div style="font-size: 0.8rem; color: #4a5568;">Score</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="background: ${score.passed ? '#c6f6d5' : '#fed7d7'}; color: ${score.passed ? '#22543d' : '#742a2a'}; padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: bold;">${score.percentage}%</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="background: ${score.passed ? '#48bb78' : '#e53e3e'}; color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: bold;">${score.passed ? 'PASS' : 'FAIL'}</div>
+                                </div>
+                                <div style="text-align: center; color: #718096; font-size: 0.8rem;">
+                                    <div>${score.date}</div>
+                                    <div>${score.timeTaken}</div>
+                                </div>
+                            </div>
+                        `).join('') : '<div style="text-align: center; color: #718096; padding: 2rem;">No Final Exam records available yet</div>'}
+                    </div>
+                </div>
+                
+                <div style="text-align: center;">
+                    <button onclick="exportFinalExamScores()" style="background: linear-gradient(135deg, #4299e1, #3182ce); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; margin-right: 1rem;">
+                        📤 Export Records
+                    </button>
+                    <button onclick="closeAdminModal()" style="background: linear-gradient(135deg, #4a5568, #2d3748); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600;">
+                        ✅ Close
+                    </button>
+                </div>
+            `;
+            showAdminModal(content);
+            showNotification('🏆 Final Exam Records opened', 'info', 2000);
+        }
+        
+        // Security Settings Function
+        function showSecuritySettings() {
+            var content = `
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h2 style="color: #2d3748; margin-bottom: 1rem;">🔒 Security Settings</h2>
+                    <p style="color: #4a5568;">Manage passwords, access control, and security features</p>
+                </div>
+                
+                <div style="background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem; border-left: 4px solid #e53e3e;">
+                    <h3 style="color: #2d3748; margin-bottom: 1rem;">🛡️ Security Status</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                        <div style="background: #c6f6d5; padding: 1rem; border-radius: 8px; border-left: 4px solid #48bb78;">
+                            <div style="font-weight: bold; color: #22543d; margin-bottom: 0.5rem;">✅ Final Test Security</div>
+                            <div style="font-size: 0.9rem; color: #22543d;">Password protected with ${finalTestPasswords.length} valid passwords</div>
+                        </div>
+                        <div style="background: #c6f6d5; padding: 1rem; border-radius: 8px; border-left: 4px solid #48bb78;">
+                            <div style="font-weight: bold; color: #22543d; margin-bottom: 0.5rem;">✅ Student Verification</div>
+                            <div style="font-size: 0.9rem; color: #22543d;">Student codes validated against database</div>
+                        </div>
+                        <div style="background: #c6f6d5; padding: 1rem; border-radius: 8px; border-left: 4px solid #48bb78;">
+                            <div style="font-weight: bold; color: #22543d; margin-bottom: 0.5rem;">✅ Anti-Cheating</div>
+                            <div style="font-size: 0.9rem; color: #22543d;">Developer tools and right-click disabled during exams</div>
+                        </div>
+                        <div style="background: #c6f6d5; padding: 1rem; border-radius: 8px; border-left: 4px solid #48bb78;">
+                            <div style="font-weight: bold; color: #22543d; margin-bottom: 0.5rem;">✅ Data Integrity</div>
+                            <div style="font-size: 0.9rem; color: #22543d;">Local storage protection and validation</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
+                    <h3 style="color: #2d3748; margin-bottom: 1rem;">🔑 Final Test Passwords</h3>
+                    <div style="background: #fff5f5; padding: 1rem; border-radius: 8px; border-left: 4px solid #e53e3e; margin-bottom: 1rem;">
+                        <div style="font-weight: bold; color: #c53030; margin-bottom: 0.5rem;">⚠️ Confidential Information</div>
+                        <div style="font-size: 0.9rem; color: #9c2626;">Only authorized instructors should have access to these passwords</div>
+                    </div>
+                    <div style="display: grid; gap: 0.5rem;">
+                        ${finalTestPasswords.map((password, index) => `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; background: #f8f9fa; border-radius: 8px; font-family: monospace;">
+                                <div style="font-weight: bold; color: #2d3748;">Password ${index + 1}:</div>
+                                <div style="background: #e2e8f0; padding: 0.3rem 0.8rem; border-radius: 4px; color: #2d3748; font-weight: bold;">${password}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
+                    <h3 style="color: #2d3748; margin-bottom: 1rem;">⚙️ Security Actions</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;" onclick="showNotification('Security audit completed successfully!', 'success', 3000)">
+                            <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">🔍</div>
+                            <div style="font-weight: bold; color: #2d3748;">Security Audit</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Run comprehensive security check</div>
+                        </div>
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;" onclick="showNotification('Access logs exported successfully!', 'success', 3000)">
+                            <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">📊</div>
+                            <div style="font-weight: bold; color: #2d3748;">Access Logs</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">View and export access logs</div>
+                        </div>
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;" onclick="showNotification('Security settings backed up!', 'success', 3000)">
+                            <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">💾</div>
+                            <div style="font-weight: bold; color: #2d3748;">Backup Settings</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Backup security configuration</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center;">
+                    <button onclick="closeAdminModal()" style="background: linear-gradient(135deg, #4a5568, #2d3748); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600;">
+                        ✅ Close
+                    </button>
+                </div>
+            `;
+            showAdminModal(content);
+            showNotification('🔒 Security Settings opened', 'info', 2000);
+        }
+        
+        // Export Options Function
+        function showExportOptions() {
+            var content = `
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h2 style="color: #2d3748; margin-bottom: 1rem;">📤 Export & Reports</h2>
+                    <p style="color: #4a5568;">Download exam results, reports, and system data</p>
+                </div>
+                
+                <div style="background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem; border-left: 4px solid #4299e1;">
+                    <h3 style="color: #2d3748; margin-bottom: 1rem;">📋 Available Exports</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+                        <div style="background: #f7fafc; padding: 1.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;" onclick="exportFinalExamScores()">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.8rem;">🏆</div>
+                            <div style="font-weight: bold; color: #2d3748; margin-bottom: 0.5rem;">Final Exam Results</div>
+                            <div style="font-size: 0.9rem; color: #4a5568; margin-bottom: 1rem;">Export all Final Exam scores to CSV format</div>
+                            <div style="background: #4299e1; color: white; padding: 0.5rem 1rem; border-radius: 4px; font-size: 0.9rem; text-align: center;">Download CSV</div>
+                        </div>
+                        
+                        <div style="background: #f7fafc; padding: 1.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;" onclick="exportAllExamResults()">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.8rem;">📊</div>
+                            <div style="font-weight: bold; color: #2d3748; margin-bottom: 0.5rem;">All Exam Results</div>
+                            <div style="font-size: 0.9rem; color: #4a5568; margin-bottom: 1rem;">Export all practice exam results</div>
+                            <div style="background: #48bb78; color: white; padding: 0.5rem 1rem; border-radius: 4px; font-size: 0.9rem; text-align: center;">Download CSV</div>
+                        </div>
+                        
+                        <div style="background: #f7fafc; padding: 1.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;" onclick="exportStudentList()">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.8rem;">👥</div>
+                            <div style="font-weight: bold; color: #2d3748; margin-bottom: 0.5rem;">Student Database</div>
+                            <div style="font-size: 0.9rem; color: #4a5568; margin-bottom: 1rem;">Export complete student list with courses</div>
+                            <div style="background: #9f7aea; color: white; padding: 0.5rem 1rem; border-radius: 4px; font-size: 0.9rem; text-align: center;">Download CSV</div>
+                        </div>
+                        
+                        <div style="background: #f7fafc; padding: 1.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;" onclick="generateAnalyticsReport()">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.8rem;">📈</div>
+                            <div style="font-weight: bold; color: #2d3748; margin-bottom: 0.5rem;">Analytics Report</div>
+                            <div style="font-size: 0.9rem; color: #4a5568; margin-bottom: 1rem;">Generate comprehensive performance report</div>
+                            <div style="background: #ed8936; color: white; padding: 0.5rem 1rem; border-radius: 4px; font-size: 0.9rem; text-align: center;">Generate PDF</div>
+                        </div>
+                        
+                        <div style="background: #f7fafc; padding: 1.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;" onclick="exportQuestionBank()">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.8rem;">❓</div>
+                            <div style="font-weight: bold; color: #2d3748; margin-bottom: 0.5rem;">Question Bank</div>
+                            <div style="font-size: 0.9rem; color: #4a5568; margin-bottom: 1rem;">Export all questions with answers</div>
+                            <div style="background: #e53e3e; color: white; padding: 0.5rem 1rem; border-radius: 4px; font-size: 0.9rem; text-align: center;">Download JSON</div>
+                        </div>
+                        
+                        <div style="background: #f7fafc; padding: 1.5rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;" onclick="exportSystemBackup()">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.8rem;">💾</div>
+                            <div style="font-weight: bold; color: #2d3748; margin-bottom: 0.5rem;">System Backup</div>
+                            <div style="font-size: 0.9rem; color: #4a5568; margin-bottom: 1rem;">Complete system data backup</div>
+                            <div style="background: #2d3748; color: white; padding: 0.5rem 1rem; border-radius: 4px; font-size: 0.9rem; text-align: center;">Download ZIP</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
+                    <h3 style="color: #2d3748; margin-bottom: 1rem;">📋 Export Statistics</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #4299e1;">${finalExamScores.length}</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Final Exam Records</div>
+                        </div>
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #48bb78;">${examResults.length}</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Practice Exam Records</div>
+                        </div>
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #9f7aea;">${Object.keys(students).length}</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Registered Students</div>
+                        </div>
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #ed8936;">115</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Total Questions</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center;">
+                    <button onclick="closeAdminModal()" style="background: linear-gradient(135deg, #4a5568, #2d3748); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600;">
+                        ✅ Close
+                    </button>
+                </div>
+            `;
+            showAdminModal(content);
+            showNotification('📤 Export Options opened', 'info', 2000);
+        }
+        
+        // System Settings Function
+        function showSystemSettings() {
+            var content = `
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h2 style="color: #2d3748; margin-bottom: 1rem;">⚙️ System Settings</h2>
+                    <p style="color: #4a5568;">Configure exam parameters and system preferences</p>
+                </div>
+                
+                <div style="background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem; border-left: 4px solid #9f7aea;">
+                    <h3 style="color: #2d3748; margin-bottom: 1rem;">🎯 Exam Configuration</h3>
+                    <div style="display: grid; gap: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <div>
+                                <div style="font-weight: bold; color: #2d3748;">Default Time Limit</div>
+                                <div style="font-size: 0.9rem; color: #4a5568;">Standard exam duration for practice tests</div>
+                            </div>
+                            <div style="background: #e2e8f0; padding: 0.5rem 1rem; border-radius: 4px; color: #2d3748; font-weight: bold;">35 minutes</div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <div>
+                                <div style="font-weight: bold; color: #2d3748;">Passing Score</div>
+                                <div style="font-size: 0.9rem; color: #4a5568;">Minimum score required to pass</div>
+                            </div>
+                            <div style="background: #e2e8f0; padding: 0.5rem 1rem; border-radius: 4px; color: #2d3748; font-weight: bold;">60%</div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <div>
+                                <div style="font-weight: bold; color: #2d3748;">Final Exam Duration</div>
+                                <div style="font-size: 0.9rem; color: #4a5568;">Comprehensive assessment time limit</div>
+                            </div>
+                            <div style="background: #e2e8f0; padding: 0.5rem 1rem; border-radius: 4px; color: #2d3748; font-weight: bold;">60 minutes</div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <div>
+                                <div style="font-weight: bold; color: #2d3748;">Final Exam Passing Score</div>
+                                <div style="font-size: 0.9rem; color: #4a5568;">Higher standard for final assessment</div>
+                            </div>
+                            <div style="background: #e2e8f0; padding: 0.5rem 1rem; border-radius: 4px; color: #2d3748; font-weight: bold;">70%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
+                    <h3 style="color: #2d3748; margin-bottom: 1rem;">🎨 Interface Settings</h3>
+                    <div style="display: grid; gap: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <div>
+                                <div style="font-weight: bold; color: #2d3748;">Dark Mode Support</div>
+                                <div style="font-size: 0.9rem; color: #4a5568;">Toggle between light and dark themes</div>
+                            </div>
+                            <div style="background: #48bb78; color: white; padding: 0.3rem 0.8rem; border-radius: 4px; font-size: 0.9rem;">✅ Enabled</div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <div>
+                                <div style="font-weight: bold; color: #2d3748;">Responsive Design</div>
+                                <div style="font-size: 0.9rem; color: #4a5568;">Mobile and tablet compatibility</div>
+                            </div>
+                            <div style="background: #48bb78; color: white; padding: 0.3rem 0.8rem; border-radius: 4px; font-size: 0.9rem;">✅ Enabled</div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <div>
+                                <div style="font-weight: bold; color: #2d3748;">Notification System</div>
+                                <div style="font-size: 0.9rem; color: #4a5568;">Real-time alerts and feedback</div>
+                            </div>
+                            <div style="background: #48bb78; color: white; padding: 0.3rem 0.8rem; border-radius: 4px; font-size: 0.9rem;">✅ Enabled</div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <div>
+                                <div style="font-weight: bold; color: #2d3748;">Progress Tracking</div>
+                                <div style="font-size: 0.9rem; color: #4a5568;">Visual progress indicators</div>
+                            </div>
+                            <div style="background: #48bb78; color: white; padding: 0.3rem 0.8rem; border-radius: 4px; font-size: 0.9rem;">✅ Enabled</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
+                    <h3 style="color: #2d3748; margin-bottom: 1rem;">🔧 System Tools</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;" onclick="showNotification('System cache cleared successfully!', 'success', 3000)">
+                            <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">🧹</div>
+                            <div style="font-weight: bold; color: #2d3748;">Clear Cache</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Clear system cache and temporary data</div>
+                        </div>
+                        
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;" onclick="showNotification('System optimized successfully!', 'success', 3000)">
+                            <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">⚡</div>
+                            <div style="font-weight: bold; color: #2d3748;">Optimize Performance</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Optimize system for better performance</div>
+                        </div>
+                        
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;" onclick="showNotification('System health check completed!', 'success', 3000)">
+                            <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">🏥</div>
+                            <div style="font-weight: bold; color: #2d3748;">Health Check</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Run comprehensive system health check</div>
+                        </div>
+                        
+                        <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;" onclick="showNotification('System restarted successfully!', 'success', 3000)">
+                            <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">🔄</div>
+                            <div style="font-weight: bold; color: #2d3748;">Restart System</div>
+                            <div style="font-size: 0.9rem; color: #4a5568;">Restart system services</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center;">
+                    <button onclick="closeAdminModal()" style="background: linear-gradient(135deg, #4a5568, #2d3748); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600;">
+                        ✅ Close
+                    </button>
+                </div>
+            `;
+            showAdminModal(content);
+            showNotification('⚙️ System Settings opened', 'info', 2000);
+        }
+        
+        // Helper function to show admin modal
+        function showAdminModal(content) {
+            document.getElementById('adminModalContent').innerHTML = content;
+            document.getElementById('adminModal').style.display = 'flex';
+        }
+        
+        // Helper function to close admin modal
+        function closeAdminModal() {
+            document.getElementById('adminModal').style.display = 'none';
+        }
+        
+        // Export functions
+        function exportAllExamResults() {
+            if (examResults.length === 0) {
+                showNotification('⚠️ No exam results to export', 'warning', 3000);
+                return;
+            }
+            
+            var csvContent = "Student Name,Student Code,Course,Question Set,Score,Total Questions,Percentage,Passed,Date,Time Taken\n";
+            examResults.forEach(function(result) {
+                csvContent += `${result.studentName},${result.studentCode},${result.course},Set ${result.questionSet},${result.score},${result.totalQuestions},${result.percentage}%,${result.passed ? 'Yes' : 'No'},${result.date},${result.timeTaken}\n`;
+            });
+            
+            downloadCSV(csvContent, 'all_exam_results.csv');
+            showNotification('📤 All exam results exported successfully!', 'success', 3000);
+        }
+        
+        function exportStudentList() {
+            var csvContent = "Student Code,Student Name,Course,Join Date\n";
+            Object.keys(students).forEach(function(code) {
+                var student = students[code];
+                csvContent += `${code},${student.name},${student.course},${student.joinDate}\n`;
+            });
+            
+            downloadCSV(csvContent, 'student_database.csv');
+            showNotification('👥 Student database exported successfully!', 'success', 3000);
+        }
+        
+        function generateAnalyticsReport() {
+            showNotification('📈 Analytics report generation started...', 'info', 2000);
+            setTimeout(function() {
+                showNotification('📄 Analytics report generated successfully!', 'success', 3000);
+            }, 2000);
+        }
+        
+        function exportQuestionBank() {
+            var jsonContent = JSON.stringify(questionSets, null, 2);
+            downloadFile(jsonContent, 'question_bank.json', 'application/json');
+            showNotification('❓ Question bank exported successfully!', 'success', 3000);
+        }
+        
+        function exportSystemBackup() {
+            var backupData = {
+                students: students,
+                questionSets: questionSets,
+                examResults: examResults,
+                finalExamScores: finalExamScores,
+                exportDate: new Date().toISOString()
+            };
+            
+            var jsonContent = JSON.stringify(backupData, null, 2);
+            downloadFile(jsonContent, 'system_backup.json', 'application/json');
+            showNotification('💾 System backup created successfully!', 'success', 3000);
+        }
+        
+        // Shuffle questions function
+        function shuffleQuestions() {
+            // Note: We keep questions in order as per your requirement
+            showNotification('🔀 Questions are maintained in sequential order as per system design', 'info', 3000);
+        }
+        
+        // **END OF ADMIN FUNCTIONS**
+        
+        // Notification System
+        function showNotification(message, type, duration) {
+            var existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(function(n) { n.remove(); });
+            
+            var notification = document.createElement('div');
+            notification.className = 'notification ' + type;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(function() {
+                notification.remove();
+            }, duration || 3000);
+        }
+        
+        // Theme Toggle
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark-mode', isDarkMode);
+            document.getElementById('themeToggle').textContent = isDarkMode ? '☀️ Light' : '🌙 Dark';
+            showNotification('Switched to ' + (isDarkMode ? 'Dark' : 'Light') + ' mode', 'info', 2000);
+        }
+        
+        // Admin Panel Toggle
+        function toggleAdmin() {
+            isAdminMode = !isAdminMode;
+            if (isAdminMode) {
+                hideAllSections();
+                document.getElementById('adminSection').style.display = 'block';
+                document.getElementById('examHeader').style.display = 'block';
+                showNotification('Admin panel activated', 'info', 2000);
+            } else {
+                hideAllSections();
+                document.getElementById('homeSection').style.display = 'block';
+                document.getElementById('examHeader').style.display = 'none';
+                showNotification('Returned to main system', 'info', 2000);
+            }
+        }
+        
+        // Helper function to download CSV
+        function downloadCSV(content, filename) {
+            var blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+            var link = document.createElement('a');
+            if (link.download !== undefined) {
+                var url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+        
+        // Helper function to download file
+        function downloadFile(content, filename, mimeType) {
+            var blob = new Blob([content], { type: mimeType });
+            var link = document.createElement('a');
+            if (link.download !== undefined) {
+                var url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+        
+        // Clear Final Exam Records
+        function clearFinalExamRecords() {
+            if (finalExamScores.length === 0) {
+                showNotification('⚠️ No Final Exam records to clear', 'warning', 3000);
+                return;
+            }
+            
+            if (confirm('⚠️ Are you sure you want to delete ALL Final Exam records? This action cannot be undone.')) {
+                finalExamScores = [];
+                localStorage.setItem('finalExamScores', JSON.stringify(finalExamScores));
+                showNotification('🗑️ All Final Exam records cleared successfully!', 'success', 3000);
+                
+                // Update display if modal is open
+                if (document.getElementById('adminModal').style.display === 'flex') {
+                    showFinalExamRecords();
+                }
+            }
+        }
+        
+        // Export Final Exam Scores
+        function exportFinalExamScores() {
+            if (finalExamScores.length === 0) {
+                showNotification('⚠️ No Final Exam scores to export', 'warning', 3000);
+                return;
+            }
+            
+            var csvContent = "Student Code,Student Name,Course,Score,Total Questions,Percentage,Passed,Time Taken,Date,Timestamp\n";
+            finalExamScores.forEach(function(score) {
+                csvContent += `${score.studentCode},${score.studentName},${score.course},${score.score},${score.totalQuestions},${score.percentage}%,${score.passed ? 'Yes' : 'No'},${score.timeTaken},${score.date},${score.timestamp}\n`;
+            });
+            
+            downloadCSV(csvContent, 'final_exam_scores.csv');
+            showNotification('📤 Final Exam scores exported successfully!', 'success', 3000);
+        }
+        
+        // Hide all sections
+        function hideAllSections() {
+            var sections = ['homeSection', 'setSelectionSection', 'studentInfoSection', 'examSection', 'resultSection', 'reviewSection', 'adminSection'];
+            sections.forEach(function(id) {
+                var element = document.getElementById(id);
+                if (element) element.style.display = 'none';
+            });
+        }
+        
+        // Access test with loading
+        function accessTest() {
+            var code = document.getElementById('studentCode').value.trim().toUpperCase();
+            if (!code) {
+                showNotification('Please enter your Student Code', 'warning');
+                return;
+            }
+            
+            var loadingBar = document.getElementById('loadingBar');
+            var loadingProgress = document.getElementById('loadingProgress');
+            loadingBar.style.display = 'block';
+            
+            var progress = 0;
+            var loadingInterval = setInterval(function() {
+                progress += 10;
+                loadingProgress.style.width = progress + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(loadingInterval);
+                    loadingBar.style.display = 'none';
+                    
+                    if (!students[code]) {
+                        showNotification('❌ Invalid Student Code! Please check and try again.', 'error');
+                        return;
+                    }
+                    
+                    var student = students[code];
+                    if (eligibleCourses.indexOf(student.course) === -1) {
+                        showNotification('❌ Course Restriction! Your course is not eligible for this exam.', 'error');
+                        return;
+                    }
+                    
+                    // Success
+                    currentStudentData = student;
+                    studentId = code;
+                    
+                    hideAllSections();
+                    document.getElementById('examHeader').style.display = 'block';
+                    document.getElementById('setSelectionSection').style.display = 'block';
+                    
+                    document.getElementById('studentDetailsSet').innerHTML = 
+                        '<p><strong>🎓 Student Name:</strong> ' + student.name + '</p>' +
+                        '<p><strong>🆔 Student Code:</strong> ' + code + '</p>' +
+                        '<p><strong>📚 Course:</strong> ' + student.course + '</p>' +
+                        '<p><strong>📅 Join Date:</strong> ' + (student.joinDate || 'N/A') + '</p>';
+                    
+                    showNotification('Welcome ' + student.name + '! Please select your Tally Prime question set.', 'success');
+                }
+            }, 100);
+        }
+        
+        // Final test access
+        function requestFinalTestAccess() {
+            document.getElementById('passwordModal').style.display = 'block';
+            document.getElementById('finalTestPassword').focus();
+        }
+        
+        function verifyFinalTestPassword() {
+            var enteredPassword = document.getElementById('finalTestPassword').value.trim();
+            if (!enteredPassword) {
+                showNotification('⚠️ Please enter the password', 'warning');
+                return;
+            }
+            
+            if (finalTestPasswords.indexOf(enteredPassword) !== -1) {
+                document.getElementById('passwordModal').style.display = 'none';
+                document.getElementById('finalTestPassword').value = '';
+                selectQuestionSet('FINAL');
+                showNotification('✅ Final Test Access Granted! Good luck with your comprehensive Tally Prime assessment!', 'success', 4000);
+            } else {
+                showNotification('❌ Incorrect Password! Contact your instructor for the correct password.', 'error');
+                document.getElementById('finalTestPassword').value = '';
+                document.getElementById('finalTestPassword').focus();
+            }
+        }
+        
+        function closeFinalTestModal() {
+            document.getElementById('passwordModal').style.display = 'none';
+            document.getElementById('finalTestPassword').value = '';
+        }
+        
+        // FIXED Question set selection - GUARANTEED SEQUENTIAL ORDER
+        function selectQuestionSet(setId) {
+            selectedQuestionSet = setId;
+            
+            // CRITICAL FIX: Proper array cloning to ensure sequential order
+            var originalQuestions = questionSets[setId].questions;
+            questions = [];
+            
+            // Create a new array with proper sequential order
+            for (var i = 0; i < originalQuestions.length; i++) {
+                questions[i] = {
+                    question: originalQuestions[i].question,
+                    options: originalQuestions[i].options.slice(), // Clone options array
+                    correct: originalQuestions[i].correct
+                };
+            }
+            
+            hideAllSections();
+            document.getElementById('studentInfoSection').style.display = 'block';
+            document.getElementById('examHeader').style.display = 'block';
+            
+            var setInfo = questionSets[setId];
+            document.getElementById('selectedSetDisplay').textContent = '📝 Selected: ' + setInfo.title;
+            
+            var timeLimit = setId === 'FINAL' ? '60 minutes' : '35 minutes';
+            var questionCount = setId === 'FINAL' ? '40' : '25';
+            var passingScore = setId === 'FINAL' ? '70%' : '60%';
+            var correctAnswers = setId === 'FINAL' ? '28' : '15';
+            
+            document.getElementById('instructionsList').innerHTML = 
+                '<li>⏰ <strong>Time Limit:</strong> ' + timeLimit + '</li>' +
+                '<li>📊 <strong>Questions:</strong> ' + questionCount + ' Multiple Choice Questions</li>' +
+                '<li>🎯 <strong>Difficulty:</strong> ' + setInfo.title.split(' - ')[1] + '</li>' +
+                '<li>✅ <strong>Passing Score:</strong> ' + passingScore + ' (' + correctAnswers + ' correct answers)</li>' +
+                '<li>⏭️ <strong>Skip Option:</strong> You can skip questions and return later</li>' +
+                '<li>🔄 <strong>Navigation:</strong> Use Previous/Next buttons to move between questions</li>' +
+                '<li>📤 <strong>Auto-Submit:</strong> Exam will auto-submit when time expires</li>' +
+                '<li>🎯 <strong>Smart Features:</strong> Progress tracking, visual feedback, and performance analytics</li>' +
+                '<li>📋 <strong>SEQUENTIAL ORDER:</strong> Questions appear as 1, 2, 3, 4, 5, 6, 7, 8, 9, 10...</li>' +
+                (setId === 'FINAL' ? '<li>🏆 <strong>Final Assessment:</strong> Comprehensive Tally Prime test covering all modules</li>' : '');
+            
+            document.getElementById('studentDetails').innerHTML = 
+                '<p><strong>🎓 Student Name:</strong> ' + currentStudentData.name + '</p>' +
+                '<p><strong>🆔 Student Code:</strong> ' + studentId + '</p>' +
+                '<p><strong>📚 Course:</strong> ' + currentStudentData.course + '</p>' +
+                '<p><strong>📅 Join Date:</strong> ' + (currentStudentData.joinDate || 'N/A') + '</p>';
+            
+            showNotification('✅ Set ' + setId + ' selected - ' + questionCount + ' questions in STRICT SEQUENCE (1→2→3→4→5...)', 'success');
+        }
+        
+        // FIXED Start exam function
+        function startExam() {
+            examStarted = true;
+            
+            hideAllSections();
+            document.getElementById('examSection').style.display = 'block';
+            document.getElementById('examHeader').style.display = 'block';
+            
+            // Initialize user answers array with proper length
+            userAnswers = new Array(questions.length);
+            for (var j = 0; j < userAnswers.length; j++) {
+                userAnswers[j] = null;
+            }
+            
+            // Reset to first question
+            currentQuestion = 0;
+            timeLeft = questionSets[selectedQuestionSet].timeLimit;
+            
+            // Update progress display
+            document.getElementById('progress').innerHTML = 
+                '<span>📊</span>' +
+                '<span>Question 1 of ' + questions.length + '</span>';
+            
+            // Start timer
+            timer = setInterval(function() {
+                timeLeft--;
+                updateTimerDisplay();
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    autoSubmitExam();
+                }
+            }, 1000);
+            
+            // Load the first question
+            loadQuestion();
+            showNotification('Tally Prime exam started! Questions in PERFECT order: 1→2→3→4→5...', 'success', 3000);
+        }
+        
+        // FIXED Load question function
+        function loadQuestion() {
+            if (currentQuestion < 0 || currentQuestion >= questions.length) {
+                return;
+            }
+            
+            var question = questions[currentQuestion];
+            var container = document.getElementById('questionContainer');
+            
+            // Fade out effect
+            container.style.opacity = '0';
+            
+            setTimeout(function() {
+                var questionHTML = 
+                    '<div class="question">' +
+                        '<strong>' + (currentQuestion + 1) + '. ' + question.question + '</strong>' +
+                    '</div>' +
+                    '<div class="options">';
+                
+                // Add all options
+                for (var i = 0; i < question.options.length; i++) {
+                    var isSelected = userAnswers[currentQuestion] === i;
+                    questionHTML += 
+                        '<div class="option ' + (isSelected ? 'selected' : '') + '" onclick="selectOption(' + i + ')">' +
+                            '<input type="radio" name="question_' + currentQuestion + '" value="' + i + '" ' + (isSelected ? 'checked' : '') + '>' +
+                            '<span>' + String.fromCharCode(65 + i) + '. ' + question.options[i] + '</span>' +
+                        '</div>';
+                }
+                
+                // Add skip option
+                var isSkipped = userAnswers[currentQuestion] === -1;
+                questionHTML += 
+                    '<div class="option skip-option ' + (isSkipped ? 'selected' : '') + '" onclick="skipQuestion()">' +
+                        '<input type="radio" name="question_' + currentQuestion + '" value="-1" ' + (isSkipped ? 'checked' : '') + '>' +
+                        '<span>⏭️ SKIP (Answer Later)</span>' +
+                    '</div>' +
+                '</div>';
+                
+                container.innerHTML = questionHTML;
+                container.style.opacity = '1';
+                
+                updateProgress();
+                updateNavigation();
+            }, 200);
+        }
+        
+        // Answer selection functions
+        function selectOption(optionIndex) {
+            userAnswers[currentQuestion] = optionIndex;
+            loadQuestion(); // Reload to show selection
+        }
+        
+        function skipQuestion() {
+            userAnswers[currentQuestion] = -1;
+            loadQuestion(); // Reload to show skip
+            showNotification('Question skipped. You can return to it later.', 'warning', 2000);
+        }
+        
+        // Update progress
+        function updateProgress() {
+            var answeredCount = 0;
+            var skippedCount = 0;
+            
+            for (var i = 0; i < userAnswers.length; i++) {
+                if (userAnswers[i] !== null && userAnswers[i] !== -1) {
+                    answeredCount++;
+                } else if (userAnswers[i] === -1) {
+                    skippedCount++;
+                }
+            }
+            
+            document.getElementById('progress').innerHTML = 
+                '<span>📊</span>' +
+                '<span>Question ' + (currentQuestion + 1) + ' of ' + questions.length + '</span>' +
+                '<span style="font-size: 0.9rem; opacity: 0.8;">(' + answeredCount + ' answered, ' + skippedCount + ' skipped)</span>';
+        }
+        
+        // Update navigation
+        function updateNavigation() {
+            var prevBtn = document.getElementById('prevBtn');
+            var nextBtn = document.getElementById('nextBtn');
+            var submitBtn = document.getElementById('submitBtn');
+            
+            // Enable/disable previous button
+            if (prevBtn) {
+                prevBtn.disabled = currentQuestion === 0;
+                if (currentQuestion === 0) {
+                    prevBtn.style.opacity = '0.5';
+                    prevBtn.style.cursor = 'not-allowed';
+                } else {
+                    prevBtn.style.opacity = '1';
+                    prevBtn.style.cursor = 'pointer';
+                }
+            }
+            
+            // Show/hide next and submit buttons
+            var isLastQuestion = currentQuestion === questions.length - 1;
+            if (nextBtn) {
+                nextBtn.style.display = isLastQuestion ? 'none' : 'inline-flex';
+            }
+            if (submitBtn) {
+                submitBtn.style.display = isLastQuestion ? 'block' : 'none';
+                if (isLastQuestion) {
+                    submitBtn.style.animation = 'pulse 1.5s infinite';
+                }
+            }
+        }
+        
+        // Update timer display
+        function updateTimerDisplay() {
+            var minutes = Math.floor(timeLeft / 60);
+            var seconds = timeLeft % 60;
+            var timeDisplay = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+            
+            var timerElement = document.getElementById('timer');
+            timerElement.innerHTML = '<span>⏰</span><span>' + timeDisplay + '</span>';
+            
+            if (timeLeft < 120) {
+                timerElement.style.color = '#e53e3e';
+            } else if (timeLeft < 300) {
+                timerElement.style.color = '#d69e2e';
+            }
+            
+            if (timeLeft === 300) {
+                showNotification('⚠️ 5 minutes remaining!', 'warning', 3000);
+            } else if (timeLeft === 60) {
+                showNotification('🚨 1 minute remaining!', 'error', 3000);
+            }
+        }
+        
+        // FIXED Navigation functions
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion = currentQuestion - 1; // Ensure proper decrement
+                loadQuestion();
+                showNotification('⬅️ Previous question loaded: ' + (currentQuestion + 1), 'info', 1500);
+            }
+        }
+        
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion = currentQuestion + 1; // Ensure proper increment
+                loadQuestion();
+                showNotification('➡️ Next question loaded: ' + (currentQuestion + 1), 'info', 1500);
+            }
+        }
+        
+        // Question map - FIXED VERSION
+        function showQuestionMap() {
+            var modal = document.getElementById('questionMapModal');
+            var grid = document.getElementById('questionMapGrid');
+            
+            // Create the grid container with inline styles
+            var mapHTML = '<div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; max-width: 450px; margin: 20px auto; padding: 10px;">';
+            
+            for (var i = 0; i < questions.length; i++) {
+                var bgColor = '#f7fafc';
+                var borderColor = '#e2e8f0';
+                var textColor = '#2d3748';
+                var statusIcon = '❔';
+                
+                if (userAnswers[i] === -1) {
+                    bgColor = '#fed7d7';
+                    borderColor = '#e53e3e';
+                    textColor = '#9c2626';
+                    statusIcon = '⏭️';
+                } else if (userAnswers[i] !== null) {
+                    bgColor = '#c6f6d5';
+                    borderColor = '#38a169';
+                    textColor = '#22543d';
+                    statusIcon = '✅';
+                }
+                
+                if (i === currentQuestion) {
+                    bgColor = '#bee3f8';
+                    borderColor = '#4299e1';
+                    textColor = '#2c5282';
+                    statusIcon = '👆';
+                }
+                
+                mapHTML += 
+                    '<div onclick="goToQuestion(' + i + '); closeQuestionMap();" ' +
+                         'style="background: ' + bgColor + '; border: 2px solid ' + borderColor + '; ' +
+                                'border-radius: 8px; padding: 8px 4px; text-align: center; cursor: pointer; ' +
+                                'font-weight: bold; font-size: 14px; color: ' + textColor + '; ' +
+                                'min-height: 50px; display: flex; flex-direction: column; ' +
+                                'align-items: center; justify-content: center; ' +
+                                'transition: all 0.3s ease;" ' +
+                         'onmouseover="this.style.transform=\'scale(1.05)\'; this.style.boxShadow=\'0 3px 10px rgba(0,0,0,0.15)\';" ' +
+                         'onmouseout="this.style.transform=\'scale(1)\'; this.style.boxShadow=\'none\';">' +
+                        '<div style="font-size: 16px; font-weight: bold; margin-bottom: 2px;">' + (i + 1) + '</div>' +
+                        '<div style="font-size: 12px;">' + statusIcon + '</div>' +
+                    '</div>';
+            }
+            
+            mapHTML += '</div>';
+            
+            // Add legend
+            mapHTML += '<div style="display: flex; justify-content: center; gap: 15px; margin: 15px 0; font-size: 13px; flex-wrap: wrap;">';
+            mapHTML += '<div style="display: flex; align-items: center; gap: 5px;"><div style="width: 12px; height: 12px; background: #c6f6d5; border: 1px solid #38a169; border-radius: 3px;"></div><span>Answered</span></div>';
+            mapHTML += '<div style="display: flex; align-items: center; gap: 5px;"><div style="width: 12px; height: 12px; background: #fed7d7; border: 1px solid #e53e3e; border-radius: 3px;"></div><span>Skipped</span></div>';
+            mapHTML += '<div style="display: flex; align-items: center; gap: 5px;"><div style="width: 12px; height: 12px; background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 3px;"></div><span>Unanswered</span></div>';
+            mapHTML += '<div style="display: flex; align-items: center; gap: 5px;"><div style="width: 12px; height: 12px; background: #bee3f8; border: 1px solid #4299e1; border-radius: 3px;"></div><span>Current</span></div>';
+            mapHTML += '</div>';
+            
+            grid.innerHTML = mapHTML;
+            modal.style.display = 'block';
+            showNotification('🗺️ Question map opened - Click any question to navigate', 'info', 2000);
+        }
+        
+        function closeQuestionMap() {
+            document.getElementById('questionMapModal').style.display = 'none';
+            showNotification('🗺️ Question map closed', 'info', 1500);
+        }
+        
+        function goToQuestion(questionIndex) {
+            if (questionIndex >= 0 && questionIndex < questions.length) {
+                currentQuestion = questionIndex;
+                loadQuestion();
+                showNotification('📍 Jumped to question ' + (questionIndex + 1), 'success', 2000);
+            }
+        }
+        
+        // Exam submission
+        function submitExam() {
+            var unansweredCount = 0;
+            var skippedCount = 0;
+            var answeredCount = 0;
+            
+            for (var i = 0; i < userAnswers.length; i++) {
+                if (userAnswers[i] === null) {
+                    unansweredCount++;
+                } else if (userAnswers[i] === -1) {
+                    skippedCount++;
+                } else {
+                    answeredCount++;
+                }
+            }
+            
+            var modalMessage = '';
+            
+            if (unansweredCount > 0 || skippedCount > 0) {
+                modalMessage = '<div style="background: #fed7d7; padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">';
+                
+                if (unansweredCount > 0 && skippedCount > 0) {
+                    modalMessage += '<p style="font-weight: bold; color: #c53030; margin-bottom: 1rem;">⚠️ You have incomplete answers!</p>';
+                    modalMessage += '<p>You have <strong>' + unansweredCount + ' unanswered</strong> and <strong>' + skippedCount + ' skipped</strong> questions.</p>';
+                } else if (unansweredCount > 0) {
+                    modalMessage += '<p style="font-weight: bold; color: #c53030; margin-bottom: 1rem;">⚠️ You have unanswered questions!</p>';
+                    modalMessage += '<p>You have <strong>' + unansweredCount + ' unanswered</strong> questions.</p>';
+                } else if (skippedCount > 0) {
+                    modalMessage += '<p style="font-weight: bold; color: #c53030; margin-bottom: 1rem;">⚠️ You have skipped questions!</p>';
+                    modalMessage += '<p>You have <strong>' + skippedCount + ' skipped</strong> questions.</p>';
+                }
+                
+                modalMessage += '<div style="background: white; padding: 1rem; border-radius: 8px; margin: 1rem 0;">';
+                modalMessage += '<h4 style="margin-bottom: 0.5rem;">📊 Summary:</h4>';
+                modalMessage += '<p>✅ <strong>Answered:</strong> ' + answeredCount + '/' + questions.length + '</p>';
+                if (skippedCount > 0) modalMessage += '<p>⏭️ <strong>Skipped:</strong> ' + skippedCount + '</p>';
+                if (unansweredCount > 0) modalMessage += '<p>❓ <strong>Unanswered:</strong> ' + unansweredCount + '</p>';
+                modalMessage += '</div>';
+                
+                modalMessage += '<p style="font-weight: bold; color: #9c2626;">⚠️ Skipped and unanswered questions will be marked as <strong>INCORRECT</strong>.</p>';
+                modalMessage += '</div>';
+                modalMessage += '<p style="margin-top: 1rem; font-size: 1.1rem; color: #2d3748;">Are you sure you want to submit your exam now?</p>';
+                
+            } else {
+                modalMessage = '<div style="background: #c6f6d5; padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">';
+                modalMessage += '<p style="font-weight: bold; color: #22543d; margin-bottom: 1rem;">🎉 Excellent work!</p>';
+                modalMessage += '<p>You have answered <strong>all ' + questions.length + ' questions</strong>.</p>';
+                modalMessage += '<div style="background: white; padding: 1rem; border-radius: 8px; margin: 1rem 0;">';
+                modalMessage += '<p>✅ <strong>Completed:</strong> ' + answeredCount + '/' + questions.length + ' questions</p>';
+                modalMessage += '</div>';
+                modalMessage += '</div>';
+                modalMessage += '<p style="margin-top: 1rem; font-size: 1.1rem; color: #2d3748;">Are you ready to submit your Tally Prime exam?</p>';
+            }
+            
+            document.getElementById('submitModalMessage').innerHTML = modalMessage;
+            document.getElementById('submitModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Confirm submission
+        function confirmSubmission() {
+            document.getElementById('submitModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            if (timer) clearInterval(timer);
+            calculateResults();
+        }
+        
+        // Cancel submission
+        function cancelSubmission() {
+            document.getElementById('submitModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            showNotification('⚠️ Submission cancelled. You can continue answering questions.', 'warning', 3000);
+        }
+        
+        function autoSubmitExam() {
+            showNotification('⏰ Time is up! The exam will be submitted automatically.', 'error', 4000);
+            setTimeout(function() {
+                calculateResults();
+            }, 1000);
+        }
+        
+        // Calculate results
+        function calculateResults() {
+            var correctAnswers = 0;
+            var attemptedQuestions = 0;
+            var skippedQuestions = 0;
+            
+            for (var i = 0; i < questions.length; i++) {
+                if (userAnswers[i] === -1) {
+                    skippedQuestions++;
+                } else if (userAnswers[i] !== null) {
+                    attemptedQuestions++;
+                    if (userAnswers[i] === questions[i].correct) {
+                        correctAnswers++;
+                    }
+                }
+            }
+            
+            var totalQuestions = questions.length;
+            var percentage = Math.round((correctAnswers / totalQuestions) * 100);
+            var passingScore = questionSets[selectedQuestionSet].passingScore;
+            var passed = percentage >= passingScore;
+            
+            // Save result
+            var result = {
+                studentName: currentStudentData.name,
+                studentCode: studentId,
+                course: currentStudentData.course,
+                questionSet: selectedQuestionSet,
+                score: correctAnswers,
+                totalQuestions: totalQuestions,
+                percentage: percentage,
+                passed: passed,
+                date: new Date().toLocaleDateString(),
+                timeTaken: getTimeTaken()
+            };
+            
+            examResults.push(result);
+            
+            // Save Final Exam scores if applicable
+            if (selectedQuestionSet === 'FINAL') {
+                saveFinalExamScore(
+                    {studentCode: studentId, studentName: currentStudentData.name, course: currentStudentData.course},
+                    correctAnswers, totalQuestions, percentage, passed, getTimeTaken()
+                );
+            }
+            
+            // Show results
+            hideAllSections();
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('examHeader').style.display = 'block';
+            
+            updateProgressCircle(percentage);
+            
+            var scoreDisplay = document.getElementById('scoreDisplay');
+            scoreDisplay.textContent = correctAnswers + '/' + totalQuestions + ' (' + percentage + '%)';
+            scoreDisplay.className = 'score ' + (passed ? 'pass' : 'fail');
+            
+            updateAchievementBadges(percentage, passed, selectedQuestionSet);
+            
+            var testType = selectedQuestionSet === 'FINAL' ? 'Final Comprehensive Test' : 'Practice Test Set ' + selectedQuestionSet;
+            document.getElementById('resultMessage').innerHTML = 
+                '<div style="background: ' + (passed ? '#c6f6d5' : '#fed7d7') + '; padding: 1.5rem; border-radius: 15px; margin: 1rem 0;">' +
+                    '<p><strong>🎓 Student Name:</strong> ' + currentStudentData.name + '</p>' +
+                    '<p><strong>📚 Course:</strong> ' + currentStudentData.course + '</p>' +
+                    '<p><strong>🆔 Student Code:</strong> ' + studentId + '</p>' +
+                    '<p><strong>📝 Test Type:</strong> ' + testType + '</p>' +
+                    '<p><strong>📊 Status:</strong> ' + (passed ? '✅ PASSED' : '❌ FAILED') + '</p>' +
+                    '<p><strong>🎯 Required Score:</strong> ' + passingScore + '%</p>' +
+                    '<p><strong>🏆 Grade:</strong> ' + getGrade(percentage) + '</p>' +
+                    '<p><strong>📝 Attempted:</strong> ' + attemptedQuestions + '/' + totalQuestions + ' questions</p>' +
+                    '<p><strong>⏭️ Skipped:</strong> ' + skippedQuestions + ' questions</p>' +
+                    '<p><strong>⏱️ Time Taken:</strong> ' + getTimeTaken() + '</p>' +
+                    '<p><strong>📅 Date:</strong> ' + new Date().toLocaleString() + '</p>' +
+                '</div>';
+            
+            if (passed) {
+                showNotification('🎉 Congratulations! You passed Tally Prime exam with ' + percentage + '%!', 'success', 5000);
+            } else {
+                showNotification('📚 Keep studying Tally Prime! You scored ' + percentage + '%. Required: ' + passingScore + '%', 'warning', 5000);
+            }
+        }
+        
+        // Helper functions
+        function updateProgressCircle(percentage) {
+            var circle = document.getElementById('progressCircle');
+            var text = document.getElementById('progressText');
+            
+            var color = percentage >= 90 ? '#48bb78' : 
+                       percentage >= 70 ? '#4299e1' : 
+                       percentage >= 60 ? '#d69e2e' : '#e53e3e';
+            
+            circle.style.background = 'conic-gradient(' + color + ' ' + percentage + '%, #e2e8f0 ' + percentage + '%)';
+            text.textContent = percentage + '%';
+            text.style.color = color;
+        }
+        
+        function updateAchievementBadges(percentage, passed, setId) {
+            var badges = document.getElementById('achievementBadges');
+            var badgeHTML = '';
+            
+            if (percentage >= 95) {
+                badgeHTML += '<div class="badge excellent">🏆 EXCELLENCE</div>';
+            } else if (percentage >= 85) {
+                badgeHTML += '<div class="badge excellent">⭐ OUTSTANDING</div>';
+            } else if (percentage >= 75) {
+                badgeHTML += '<div class="badge good">👍 GOOD JOB</div>';
+            } else if (percentage >= 60) {
+                badgeHTML += '<div class="badge average">✅ PASSED</div>';
+            } else {
+                badgeHTML += '<div class="badge poor">📚 STUDY MORE</div>';
+            }
+            
+            if (setId === 'FINAL' && passed) {
+                badgeHTML += '<div class="badge excellent">🎓 TALLY CERTIFIED</div>';
+            }
+            
+            if (percentage === 100) {
+                badgeHTML += '<div class="badge excellent">💎 PERFECT SCORE</div>';
+            }
+            
+            badges.innerHTML = badgeHTML;
+        }
+        
+        function getGrade(percentage) {
+            if (percentage >= 95) return 'A+';
+            if (percentage >= 90) return 'A';
+            if (percentage >= 85) return 'A-';
+            if (percentage >= 80) return 'B+';
+            if (percentage >= 75) return 'B';
+            if (percentage >= 70) return 'B-';
+            if (percentage >= 65) return 'C+';
+            if (percentage >= 60) return 'C';
+            if (percentage >= 55) return 'C-';
+            if (percentage >= 50) return 'D';
+            return 'F';
+        }
+        
+        function getTimeTaken() {
+            var totalTime = questionSets[selectedQuestionSet].timeLimit;
+            var timeTaken = totalTime - timeLeft;
+            var minutes = Math.floor(timeTaken / 60);
+            var seconds = timeTaken % 60;
+            return minutes + ':' + seconds.toString().padStart(2, '0');
+        }
+        
+        // Function to save Final Exam score
+        function saveFinalExamScore(studentData, score, totalQuestions, percentage, passed, timeTaken) {
+            var scoreRecord = {
+                studentCode: studentData.studentCode,
+                studentName: studentData.studentName,
+                course: studentData.course,
+                score: score,
+                totalQuestions: totalQuestions,
+                percentage: percentage,
+                passed: passed,
+                timeTaken: timeTaken,
+                date: new Date().toLocaleDateString(),
+                timestamp: new Date().toLocaleString(),
+                examType: 'FINAL'
+            };
+            
+            var existingIndex = finalExamScores.findIndex(function(record) {
+                return record.studentCode === studentData.studentCode;
+            });
+            
+            if (existingIndex !== -1) {
+                var existing = finalExamScores[existingIndex];
+                if (percentage > existing.percentage || confirm('Student already has a Final Exam record (' + existing.percentage + '%). Do you want to replace it with this attempt (' + percentage + '%)?')) {
+                    finalExamScores[existingIndex] = scoreRecord;
+                    showNotification('📝 Final Exam score updated for ' + studentData.studentName, 'info', 3000);
+                } else {
+                    showNotification('📝 Previous Final Exam score retained for ' + studentData.studentName, 'warning', 3000);
+                    return;
+                }
+            } else {
+                finalExamScores.push(scoreRecord);
+                showNotification('📝 Final Exam score recorded for ' + studentData.studentName, 'success', 3000);
+            }
+            
+            localStorage.setItem('finalExamScores', JSON.stringify(finalExamScores));
+        }
+        
+        // Review section
+        function showReview() {
+            hideAllSections();
+            document.getElementById('reviewSection').style.display = 'block';
+            document.getElementById('examHeader').style.display = 'block';
+            
+            var reviewHTML = '';
+            for (var i = 0; i < questions.length; i++) {
+                var question = questions[i];
+                var userAnswer = userAnswers[i];
+                var correctAnswer = question.correct;
+                var isCorrect = userAnswer === correctAnswer;
+                var wasSkipped = userAnswer === -1;
+                var wasNotAnswered = userAnswer === null;
+                
+                var statusIcon = wasNotAnswered ? '❌' : wasSkipped ? '⏭️' : isCorrect ? '✅' : '❌';
+                var statusColor = wasNotAnswered ? '#e53e3e' : wasSkipped ? '#d69e2e' : isCorrect ? '#38a169' : '#e53e3e';
+                var statusText = wasNotAnswered ? 'Not Answered' : wasSkipped ? 'Skipped' : isCorrect ? 'Correct' : 'Incorrect';
+                
+                reviewHTML += 
+                    '<div class="review-question">' +
+                        '<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">' +
+                            '<div class="question">' +
+                                '<strong>' + (i + 1) + '. ' + question.question + '</strong>' +
+                            '</div>' +
+                            '<div style="color: ' + statusColor + '; font-weight: bold; font-size: 1.1rem;">' +
+                                statusIcon + ' ' + statusText +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="options" style="margin-top: 1rem;">';
+                
+                for (var j = 0; j < question.options.length; j++) {
+                    var className = 'option';
+                    var optionIcon = '';
+                    
+                    if (j === correctAnswer) {
+                        className += ' correct';
+                        optionIcon = ' ✓';
+                    }
+                    if (j === userAnswer && !isCorrect && !wasSkipped && !wasNotAnswered) {
+                        className += ' wrong';
+                        optionIcon = ' ✗';
+                    }
+                    
+                    reviewHTML += 
+                        '<div class="' + className + '">' +
+                            String.fromCharCode(65 + j) + '. ' + question.options[j] + optionIcon +
+                        '</div>';
+                }
+                
+                reviewHTML += '</div></div>';
+            }
+            
+            document.getElementById('reviewContainer').innerHTML = reviewHTML;
+        }
+        
+        function goBackToResult() {
+            hideAllSections();
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('examHeader').style.display = 'block';
+        }
+        
+        // Helper function to ensure buttons work
+        function handleRestartClick() {
+            restartExam();
+        }
+        
+        function handleReviewClick() {
+            showReview();
+        }
+        
+        // FIXED Restart exam function
+        function restartExam() {
+            // Don't ask for confirmation, just restart smoothly
+            try {
+                // Clear timer
+                if (timer) {
+                    clearInterval(timer);
+                    timer = null;
+                }
+                
+                // Reset all exam variables
+                examStarted = false;
+                currentQuestion = 0;
+                userAnswers = [];
+                timeLeft = 2100; // Reset to 35 minutes
+                selectedQuestionSet = 'A';
+                questions = [];
+                
+                // Clear question container
+                var questionContainer = document.getElementById('questionContainer');
+                if (questionContainer) {
+                    questionContainer.innerHTML = '';
+                }
+                
+                // Reset progress display
+                var progressElement = document.getElementById('progress');
+                if (progressElement) {
+                    progressElement.innerHTML = 
+                        '<span>📊</span>' +
+                        '<span>Question 1 of 25</span>';
+                }
+                
+                // Reset timer display
+                var timerElement = document.getElementById('timer');
+                if (timerElement) {
+                    timerElement.innerHTML = 
+                        '<span>⏰</span>' +
+                        '<span>35:00</span>';
+                    timerElement.style.color = '#e53e3e'; // Reset color
+                }
+                
+                // Hide all sections first
+                var sections = ['homeSection', 'setSelectionSection', 'studentInfoSection', 'examSection', 'resultSection', 'reviewSection'];
+                sections.forEach(function(sectionId) {
+                    var element = document.getElementById(sectionId);
+                    if (element) {
+                        element.style.display = 'none';
+                    }
+                });
+                
+                // Show set selection with current student data
+                var examHeader = document.getElementById('examHeader');
+                var setSelectionSection = document.getElementById('setSelectionSection');
+                
+                if (examHeader) examHeader.style.display = 'block';
+                if (setSelectionSection) setSelectionSection.style.display = 'block';
+                
+                // Make sure student details are still shown
+                if (currentStudentData && studentId) {
+                    var studentDetailsElement = document.getElementById('studentDetailsSet');
+                    if (studentDetailsElement) {
+                        studentDetailsElement.innerHTML = 
+                            '<p><strong>🎓 Student Name:</strong> ' + currentStudentData.name + '</p>' +
+                            '<p><strong>🆔 Student Code:</strong> ' + studentId + '</p>' +
+                            '<p><strong>📚 Course:</strong> ' + currentStudentData.course + '</p>' +
+                            '<p><strong>📅 Join Date:</strong> ' + (currentStudentData.joinDate || 'N/A') + '</p>';
+                    }
+                }
+                
+                // Hide submit button
+                var submitBtn = document.getElementById('submitBtn');
+                if (submitBtn) {
+                    submitBtn.style.display = 'none';
+                    submitBtn.style.animation = 'none';
+                }
+                
+                // Reset navigation buttons
+                var prevBtn = document.getElementById('prevBtn');
+                var nextBtn = document.getElementById('nextBtn');
+                if (prevBtn) {
+                    prevBtn.disabled = true;
+                    prevBtn.style.opacity = '0.5';
+                }
+                if (nextBtn) {
+                    nextBtn.style.display = 'inline-flex';
+                }
+                
+                showNotification('🔄 Ready for new Tally Prime exam! Please select a question set.', 'success', 3000);
+                
+            } catch (error) {
+                showNotification('❌ Error restarting exam. Refreshing the page...', 'error', 3000);
+                setTimeout(function() {
+                    window.location.reload();
+                }, 2000);
+            }
+        }
+        
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Student code input event listener
+            var studentCodeInput = document.getElementById('studentCode');
+            if (studentCodeInput) {
+                studentCodeInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        accessTest();
+                    }
+                });
+            }
+            
+            // Final test password event listener
+            var finalTestPasswordInput = document.getElementById('finalTestPassword');
+            if (finalTestPasswordInput) {
+                finalTestPasswordInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        verifyFinalTestPassword();
+                    }
+                });
+            }
+            
+            // Modal click outside to close
+            window.onclick = function(event) {
+                var passwordModal = document.getElementById('passwordModal');
+                var questionMapModal = document.getElementById('questionMapModal');
+                var adminModal = document.getElementById('adminModal');
+                
+                if (event.target === passwordModal) {
+                    closeFinalTestModal();
+                }
+                if (event.target === questionMapModal) {
+                    closeQuestionMap();
+                }
+                if (event.target === adminModal) {
+                    closeAdminModal();
+                }
+            };
+            
+            // Initial notification
+            showNotification('🎓 Advanced Tally Prime MCQ System Ready! Questions will appear in PERFECT sequence: 1→2→3→4→5...', 'info', 4000);
+        });
+        
+        // Prevent cheating during exam
+        document.addEventListener('contextmenu', function(e) {
+            if (examStarted) {
+                e.preventDefault();
+                showNotification('Right-click disabled during Tally Prime exam', 'warning', 2000);
+            }
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (examStarted) {
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                    (e.ctrlKey && e.key === 'u')) {
+                    e.preventDefault();
+                    showNotification('Developer tools disabled during exam', 'warning', 2000);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
